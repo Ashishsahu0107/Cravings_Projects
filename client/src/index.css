@@ -1,7 +1,16 @@
 @import "tailwindcss";
 
+:root {
+  --bg-color: #c2410c;
+  --bg-footer: #3f3f46;
 
-:root{
-   --bg-color: #C2410C; 
-   --bg-footer: #3F3F46;
+  --primary: #001bb7;
+  --primary-text: #dfdff8;
+  --secondary: #0046ff;
+  --accent: #ff8040;
+  --success: #16a34a;
+  --error: #dc2626;
+  --warning: #f59e0b;
+  --background: #f5f1dc;
+  --text: #111827;
 }
