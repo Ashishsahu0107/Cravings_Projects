@@ -22,7 +22,6 @@ const Login = () => {
         // Handle login logic here, e.g., send loginData to the server
         //Validate loginData
 
-        console.log("Login data submitted:", loginData);
 
         const payload = {
             email: loginData.email.toLowerCase(),
