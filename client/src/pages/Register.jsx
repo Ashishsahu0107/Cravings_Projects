@@ -147,7 +147,7 @@ const Register = () => {
                 <span
                   onClick={() => navigate("/login")}
                   className="text-(--color-primary) cursor-pointer "
-                >
+                >                           
                   Login here
                 </span>
               </p>
