@@ -15,7 +15,7 @@ const Footer = () => {
           </p>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
             <div>
-              <img src={LogoHeader} alt="" className="h-35" />
+              <img src={LogoHeader} alt="Logo Header" className="h-35" />
             </div>
             <div>
               <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
