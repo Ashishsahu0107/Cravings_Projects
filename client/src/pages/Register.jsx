@@ -1,161 +1,94 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+
+const userTypes = ["customer", "restaurant", "rider"];
 
 const Register = () => {
-  const [resortApp, setResortApp] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [accept, setAccept] = useState(false);
-
+  const { userType = "customer" } = useParams();
   const navigate = useNavigate();
+  const [selectedType, setSelectedType] = useState(
+    userTypes.includes(userType) ? userType : "customer"
+  );
+  const [accepted, setAccepted] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    console.log("resort : ", resortApp);
-    console.log("FullName : ", fullName);
-    console.log("Email : ", email);
-    console.log("Mobile No : ", mobile);
-    console.log("Password : ", password);
-    console.log("Confirm Password : ", confirmPassword);
-    console.log("Checkbox : ", accept);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setSubmitted(true);
   };
+
   return (
-    <>
-      <div className='relative h-[90vh] bg-[url("/login-dashboard.png")] bg-yellow-400 grid items-center justify-end bg-cover bg-center md:ps-30 '>
-        <div className="absolute right-30">
-          <div className="bg-white p-10 grid gap-4 rounded-md w-100">
-            <div>
-              <h1 className="text-4xl text-center font-semibold text-(--color-primary) ">
-                Create Account
-              </h1>
-              <p className="text-center">
-                Join us as a Customer, Restaurant, or Rider
-              </p>
-            </div>
-            <form onSubmit={handleSubmit} className="grid gap-4">
-              <div className="grid gap-2">
-                <span>Register as:</span>
-                <div>
-                  <div className="flex gap-3">
-                    <div className="flex gap-2">
-                      <input
-                        type="radio"
-                        name="resortApp"
-                        id="customer"
-                        checked={resortApp === "customer"}
-                        value={resortApp}
-                        onChange={(e) => setResortApp(e.target.value)}
-                      />
-                      <label htmlFor="costumer">Customer</label>
-                    </div>
-                    <div className="flex gap-2">
-                      <input
-                        type="radio"
-                        name="resortApp"
-                        id="restaurant"
-                        checked={resortApp === "restorant"}
-                        value={resortApp}
-                        onChange={(e) => setResortApp(e.target.value)}
-                      />
-                      <label htmlFor="restaurant">Restaurant</label>
-                    </div>
-                    <div className="flex gap-2">
-                      <input
-                        type="radio"
-                        name="resortApp"
-                        id="rider"
-                        checked={resortApp === "rider"}
-                        value={resortApp}
-                        onChange={(e) => setResortApp(e.target.value)}
-                      />
-                      <label htmlFor="rider">Rider</label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <input
-                type="text"
-                name="fullName"
-                id="fullName"
-                placeholder="Enter your fullname"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="border border-(--color-primary) focus:outline focus:outline-(--color-primary) p-1 rounded focus:outline-2"
-              />
-              <input
-                type="text"
-                name="email"
-                id="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="border border-(--color-primary) focus:outline focus:outline-(--color-primary) p-1 rounded focus:outline-2"
-              />
-              <input
-                type="text"
-                name="mobile"
-                id="mobile"
-                placeholder="Enter your mobile"
-                value={mobile}
-                onChange={(e) => setMobile(e.target.value)}
-                className="border border-(--color-primary) focus:outline focus:outline-(--color-primary) p-1 rounded focus:outline-2"
-              />
-              <input
-                type="text"
-                name="password"
-                id="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="border border-(--color-primary) focus:outline focus:outline-(--color-primary) p-1 rounded focus:outline-2"
-              />
-              <input
-                type="text"
-                name="confirmPassword"
-                id="confirmPassword"
-                placeholder="Confirm your password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="border border-(--color-primary) focus:outline focus:outline-(--color-primary) p-1 rounded focus:outline-2"
-              />
-              <div className="flex gap-2">
-                <input
-                  type="checkbox"
-                  name="accept"
-                  id="accept"
-                  onClick={(e) => setAccept(e.target.value)}
-                />
-                <label htmlFor="accept">
-                  I agree to the{" "}
-                  <span className="text-(--color-primary) hover:underline ">
-                    terms and conditions.
-                  </span>
+    <main className="relative flex min-h-[90vh] items-center justify-end bg-[url('/commonBG.avif')] bg-cover bg-center p-6 md:p-10 md:pe-30">
+      <div className="absolute inset-0 bg-black/30"></div>
+      <div className="relative z-10 w-full max-w-md rounded-lg bg-white p-8 shadow-md md:p-10">
+        <h1 className="text-center text-4xl font-semibold text-(--color-primary)">
+          Create Account
+        </h1>
+        <p className="mb-5 text-center text-(--color-secondary)">
+          Join us as a Customer, Restaurant, or Rider
+        </p>
+        {submitted && (
+          <p className="mb-4 rounded-md bg-(--color-success) px-3 py-2 text-sm font-semibold text-white">
+            Registration form submitted.
+          </p>
+        )}
+        <form onSubmit={handleSubmit} className="grid gap-4">
+          <div>
+            <span className="mb-2 block font-medium">Register as:</span>
+            <div className="flex flex-wrap gap-3">
+              {userTypes.map((type) => (
+                <label key={type} className="flex items-center gap-2 capitalize">
+                  <input
+                    type="radio"
+                    name="userType"
+                    value={type}
+                    checked={selectedType === type}
+                    onChange={(event) => setSelectedType(event.target.value)}
+                  />
+                  {type}
                 </label>
-              </div>
-              <button
-                type="submit"
-                className="w-full py-2 rounded-md bg-(--color-primary) text-white text-lg"
-              >
-                Register
-              </button>
-              <p className="text-center ">
-                Already registered?{" "}
-                <span
-                  onClick={() => navigate("/login")}
-                  className="text-(--color-primary) cursor-pointer "
-                >                           
-                  Login here
-                </span>
-              </p>
-            </form>
+              ))}
+            </div>
           </div>
-        </div>
+          <input className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)" placeholder="Enter your full name" required />
+          <input type="email" className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)" placeholder="Enter your email" required />
+          <input type="tel" className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)" placeholder="Enter your mobile" required />
+          <input type="password" className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)" placeholder="Enter your password" required />
+          <input type="password" className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)" placeholder="Confirm your password" required />
+          <label className="flex gap-2 text-sm">
+            <input
+              type="checkbox"
+              checked={accepted}
+              onChange={(event) => setAccepted(event.target.checked)}
+              required
+            />
+            <span>
+              I agree to the{" "}
+              <Link to="/terms-of-service" className="text-(--color-primary) hover:underline">
+                terms and conditions.
+              </Link>
+            </span>
+          </label>
+          <button
+            type="submit"
+            disabled={!accepted}
+            className="w-full rounded-md bg-(--color-primary) py-2 text-lg text-white disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            Register
+          </button>
+          <p className="text-center">
+            Already registered?{" "}
+            <button
+              type="button"
+              onClick={() => navigate("/login")}
+              className="text-(--color-primary)"
+            >
+              Login here
+            </button>
+          </p>
+        </form>
       </div>
-    </>
+    </main>
   );
 };
 
