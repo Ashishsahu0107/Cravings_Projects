@@ -39,11 +39,11 @@ const Header = () => {
                         <select
                             value={theme}
                             onChange={(event) => setTheme(event.target.value)}
-                            className='bg-transparent outline-none'
+                            className='bg-transparent outline-none '
                             aria-label='Theme selection'
                         >
                             {themeOptions.map((option) => (
-                                <option key={option.value} value={option.value}>
+                                <option key={option.value} value={option.value} className='text-primary'>
                                     {option.label}
                                 </option>
                             ))}
