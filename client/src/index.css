@@ -1,2 +1,15 @@
 @import "tailwindcss";
-@plugin "flyonui";
+@plugin "flyonui" {
+  themes: all;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--color-base-100);
+  color: var(--color-base-content);
+}

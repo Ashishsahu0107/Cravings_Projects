@@ -10,8 +10,8 @@ const Footer = () => {
   return (
     <>
       <footer className="bg-(--color-neutral) text-(--color-neutral-content) py-8">
-        <div className="bg-(--bg-footer) max-w-7xl mx-auto px-4">
-          <p className="text-sm text-center mb-8 text-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <p className="text-sm text-center mb-8 text-(--color-neutral-content)">
             --- Your favorite food delivery platform connecting customers with
             restaurants and riders. ---
           </p>
@@ -70,7 +70,7 @@ const Footer = () => {
               </ul>
             </div>
           </div>
-          <div className="border-t border(--color-neutral) my-8"></div>
+          <div className="border-t border-(--color-neutral-content)/20 my-8"></div>
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-sm text-(--color-neutral-content) mb-4 md:mb-0">
               &copy; 2026 Cravings. All rights reserved.
