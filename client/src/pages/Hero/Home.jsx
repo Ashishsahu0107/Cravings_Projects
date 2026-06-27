@@ -88,7 +88,7 @@ const Home = () => {
                     {restaurant.cuisines.map((cuisine) => (
                       <span
                         key={cuisine}
-                        className="rounded bg-(--color-base-300) px-2 py-1 text-xs capitalize text-(--color-base-content)"
+                        className="rounded bg-(--color-base-300) px-2 py-1 text-xs capitalize text-(--color-base-100)"
                       >
                         {cuisine}
                       </span>

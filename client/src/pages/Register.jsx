@@ -1,20 +1,77 @@
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-const userTypes = ["customer", "restaurant", "rider"];
+const initialFormData = {
+  fullName: "",
+  email: "",
+  password: "",
+  phone: "",
+  gender: "",
+  dob: "",
+};
 
 const Register = () => {
-  const { userType = "customer" } = useParams();
-  const navigate = useNavigate();
-  const [selectedType, setSelectedType] = useState(
-    userTypes.includes(userType) ? userType : "customer"
-  );
-  const [accepted, setAccepted] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState(initialFormData);
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [accepted, setAccepted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setSubmitted(true);
+    setMessage("");
+    setError("");
+
+    if (formData.password !== confirmPassword) {
+      setError("Password and confirm password do not match.");
+      return;
+    }
+
+    const payload = {
+      fullName: formData.fullName.trim(),
+      email: formData.email.trim().toLowerCase(),
+      password: formData.password,
+      phone: formData.phone.trim(),
+      gender: formData.gender,
+      dob: formData.dob,
+    };
+
+    console.log(payload)
+
+    //   try {
+    //     setLoading(true);
+
+    //     const response = await fetch("http://localhost:4500/auth/register", {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(payload),
+    //     });
+
+    //     const data = await response.json();
+
+    //     if (!response.ok) {
+    //       throw new Error(data.message || "Registration failed.");
+    //     }
+
+    //     setFormData(initialFormData);
+    //     setConfirmPassword("");
+    //     setAccepted(false);
+    //     setMessage(data.message || "User registered successfully.");
+    //   } catch (err) {
+    //     setError(err.message || "Something went wrong.");
+    //   } finally {
+    //     setLoading(false);
+    //   }
   };
 
   return (
@@ -25,36 +82,93 @@ const Register = () => {
           Create Account
         </h1>
         <p className="mb-5 text-center text-(--color-secondary)">
-          Join us as a Customer, Restaurant, or Rider
+          Register to start ordering your cravings.
         </p>
-        {submitted && (
+
+        {message && (
           <p className="mb-4 rounded-md bg-(--color-success) px-3 py-2 text-sm font-semibold text-white">
-            Registration form submitted.
+            {message}
           </p>
         )}
+
+        {error && (
+          <p className="mb-4 rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white">
+            {error}
+          </p>
+        )}
+
         <form onSubmit={handleSubmit} className="grid gap-4">
-          <div>
-            <span className="mb-2 block font-medium">Register as:</span>
-            <div className="flex flex-wrap gap-3">
-              {userTypes.map((type) => (
-                <label key={type} className="flex items-center gap-2 capitalize">
-                  <input
-                    type="radio"
-                    name="userType"
-                    value={type}
-                    checked={selectedType === type}
-                    onChange={(event) => setSelectedType(event.target.value)}
-                  />
-                  {type}
-                </label>
-              ))}
-            </div>
-          </div>
-          <input className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)" placeholder="Enter your full name" required />
-          <input type="email" className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)" placeholder="Enter your email" required />
-          <input type="tel" className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)" placeholder="Enter your mobile" required />
-          <input type="password" className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)" placeholder="Enter your password" required />
-          <input type="password" className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)" placeholder="Confirm your password" required />
+          <input
+            type="text"
+            name="fullName"
+            value={formData.fullName}
+            onChange={handleChange}
+            className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)"
+            placeholder="Enter your full name"
+            required
+          />
+
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)"
+            placeholder="Enter your email"
+            required
+          />
+
+          <input
+            type="tel"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)"
+            placeholder="Enter your phone number"
+            required
+          />
+
+          <select
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)"
+            required
+          >
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+
+          <input
+            type="date"
+            name="dob"
+            value={formData.dob}
+            onChange={handleChange}
+            className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)"
+            required
+          />
+
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)"
+            placeholder="Enter your password"
+            required
+          />
+
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
+            className="rounded border border-(--color-primary) p-2 outline-none focus:outline-2 focus:outline-(--color-primary)"
+            placeholder="Confirm your password"
+            required
+          />
+
           <label className="flex gap-2 text-sm">
             <input
               type="checkbox"
@@ -64,18 +178,23 @@ const Register = () => {
             />
             <span>
               I agree to the{" "}
-              <Link to="/terms-of-service" className="text-(--color-primary) hover:underline">
+              <Link
+                to="/terms-of-service"
+                className="text-(--color-primary) hover:underline"
+              >
                 terms and conditions.
               </Link>
             </span>
           </label>
+
           <button
             type="submit"
-            disabled={!accepted}
+            disabled={!accepted || loading}
             className="w-full rounded-md bg-(--color-primary) py-2 text-lg text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
+
           <p className="text-center">
             Already registered?{" "}
             <button

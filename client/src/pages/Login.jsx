@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -77,12 +77,12 @@ const Login = () => {
               <div className="w-17 border" />
             </div>
             <p className="text-center ">
-              <span
-                onClick={() => navigate("/register")}
-                className="text-(--color-primary) cursor-pointer "
+              <Link
+                to='/register'
+                className="text-(--color-primary) cursor-pointer"
               >
                 Create an account
-              </span>
+              </Link>
             </p>
           </form>
         </div>
