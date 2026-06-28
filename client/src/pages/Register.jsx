@@ -1,19 +1,26 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const initialFormData = {
-  fullName: "",
-  email: "",
-  password: "",
-  phone: "",
-  gender: "",
-  dob: "",
-};
+// const initialFormData = {
+//   fullName: "",
+//   email: "",
+//   password: "",
+//   phone: "",
+//   gender: "",
+//   dob: "",
+// };
 
 const Register = () => {
 
   const navigate = useNavigate();
-  const [formData, setFormData] = useState(initialFormData);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    phone: "",
+    gender: "",
+    dob: "",
+  });
   const [confirmPassword, setConfirmPassword] = useState("");
   const [accepted, setAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -21,7 +28,9 @@ const Register = () => {
   const [error, setError] = useState("");
 
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    console.log(event);
+    // const name = event.target.name
+   const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 

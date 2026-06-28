@@ -18,14 +18,17 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here, e.g., send loginData to the server
-    //Validate loginData
-
+  
     const payload = {
       email: loginData.email.toLowerCase(),
       password: loginData.password,
     };
+    console.log(payload);
   };
+
+  
+
+  
   return (
     <>
       <div className='h-[90vh] bg-[url("/foodTable.webp")] bg-yellow-400 grid items-center justify-start bg-cover bg-center md:ps-30 '>
