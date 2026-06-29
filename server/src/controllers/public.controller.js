@@ -1,6 +1,6 @@
 import Contact from "../models/contact.model.js";
 
-export const ContactUsForm  = async (req, res, next) => {
+export const ContactUsForm = async (req, res, next) => {
   try {
     const { fullName, email, phone, subject, message } = req.body;
 
@@ -18,13 +18,13 @@ export const ContactUsForm  = async (req, res, next) => {
       message,
     });
 
-      res
-          .status(201)
-          .json({
-              message: "Message sent successfully"
-          });
+    res
+      .status(201)
+      .json({
+        message: "Message sent successfully"
+      });
   } catch (error) {
-    console.error(error);
+    console.error(error.message);
     next();
   }
 };

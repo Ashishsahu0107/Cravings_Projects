@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import api from "../config/api.config.js";
 
 const Login = () => {
+  const navigate = useNavigate("");
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -18,17 +20,28 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const payload = {
       email: loginData.email.toLowerCase(),
       password: loginData.password,
     };
-    console.log(payload);
+
+    try {
+      const res = await api.post("/auth/login", payload);
+
+      alert(res.data.message);
+      setLoginData({
+        email: "",
+        password: "",
+      })
+      navigate("/");
+    } catch (err) {
+      alert("Login Failed", err.message);
+    }
+
+
   };
 
-  
-
-  
   return (
     <>
       <div className='h-[90vh] bg-[url("/foodTable.webp")] bg-yellow-400 grid items-center justify-start bg-cover bg-center md:ps-30 '>
