@@ -1,4 +1,5 @@
 import { useState } from "react";
+import api from "../config/api.config.js";
 
 const initialForm = {
   fullName: "",
@@ -11,17 +12,39 @@ const initialForm = {
 const Contact = () => {
   const [form, setForm] = useState(initialForm);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setForm((current) => ({ ...current, [name]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setSent(true);
-    setForm(initialForm);
+
+    const payload = {
+      fullName: form.fullName.trim(),
+      email: form.email.toLowerCase().trim(),
+      phone: form.phone.trim(),
+      subject: form.subject,
+      message: form.message,
+    };
+
+
+    try {
+      const res = await api.post("/public/contactUs", payload);
+
+      alert(res.data.message);
+
+      setSent(true);
+      setForm(initialForm);
+
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong");
+    }
   };
+
+
 
   return (
     <main className="flex h-[90vh] items-center justify-start bg-[url('/contactPage.jpg')] bg-cover bg-center p-6 md:p-10 md:ps-30">
