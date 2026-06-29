@@ -38,11 +38,11 @@ export const RegisterUser = async (req, res, next) => {
             photo,
         });
 
-        res.status(201).json({ message: "User Created Successfully" });
+        res.status(201).json({ message: "User Created Successfully", data: newUser });
 
     } catch (error) {
         console.log(error.message);
-        next();
+        next(error);
     }
 };
 
@@ -57,7 +57,7 @@ export const LoginUser = async (req, res, next) => {
             return next(error);
         }
 
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email }).select("+password");
 
         if (!existingUser) {
             const error = new Error("Email not registred");
@@ -80,16 +80,17 @@ export const LoginUser = async (req, res, next) => {
 
     } catch (error) {
         console.log(error.message);
-        next();
+        next(error);
     }
 };
 
-export const LogoutUser = (req, res) => {
+
+export const LogoutUser = (req, res, next) => {
 
     try {
         
     } catch (error) {
         console.log(error.message);
-        next();
+        next(error);
     }
 };
