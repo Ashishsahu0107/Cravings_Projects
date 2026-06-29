@@ -1,7 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-
-const UserSchema = mongoose.Schema(
+const ContactSchema = mongoose.Schema(
     {
         fullName: {
             type: String,
@@ -16,18 +15,11 @@ const UserSchema = mongoose.Schema(
             type: String,
             required: true,
         },
-        gender: {
+        subject: {
             type: String,
             required: true,
         },
-        photo: {
-            type: String,
-        },
-        password: {
-            type: String,
-            required: true,
-        },
-        dob: {
+        message: {
             type: String,
             required: true,
         },
@@ -37,6 +29,6 @@ const UserSchema = mongoose.Schema(
     }
 );
 
-const User = mongoose.model("User", UserSchema);
+const Contact = mongoose.model("Contact", ContactSchema);
 
-export default User;
+export default Contact;
