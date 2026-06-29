@@ -1,11 +1,11 @@
 import User from "../models/user.model.js";
 import bcrypt from 'bcrypt';
 
-
-
 export const RegisterUser = async (req, res, next) => {
 
     try {
+        // Controller Logic
+
         const { fullName, email, password, phone, gender, dob } = req.body;
 
         if (!fullName || !email || !password || !phone || !gender || !dob) {
@@ -21,12 +21,8 @@ export const RegisterUser = async (req, res, next) => {
             return next(error);
         }
 
-        const photoUrl = `https://placehold.co/600x400?text=${fullName.charAt(0).toUpperCase()}`;
+        const photo= `https://placehold.co/600x400?text=${fullName.charAt(0).toUpperCase()}`;
 
-        const photo = {
-            url: photoUrl,
-            publicId: null,
-        };
 
         const SALT = await bcrypt.genSalt(10);
 
@@ -45,6 +41,7 @@ export const RegisterUser = async (req, res, next) => {
         res.status(201).json({ message: "User Created Successfully" });
 
     } catch (error) {
+        console.log(error.message);
         next();
     }
 };
@@ -89,4 +86,10 @@ export const LoginUser = async (req, res, next) => {
 
 export const LogoutUser = (req, res) => {
 
+    try {
+        
+    } catch (error) {
+        console.log(error.message);
+        next();
+    }
 };
