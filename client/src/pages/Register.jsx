@@ -1,14 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-// const initialFormData = {
-//   fullName: "",
-//   email: "",
-//   password: "",
-//   phone: "",
-//   gender: "",
-//   dob: "",
-// };
+import api from "../config/api.config.js";
 
 const Register = () => {
 
@@ -36,8 +28,6 @@ const Register = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setMessage("");
-    setError("");
 
     if (formData.password !== confirmPassword) {
       setError("Password and confirm password do not match.");
@@ -55,32 +45,14 @@ const Register = () => {
 
     console.log(payload)
 
-    //   try {
-    //     setLoading(true);
-
-    //     const response = await fetch("http://localhost:4500/auth/register", {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(payload),
-    //     });
-
-    //     const data = await response.json();
-
-    //     if (!response.ok) {
-    //       throw new Error(data.message || "Registration failed.");
-    //     }
-
-    //     setFormData(initialFormData);
-    //     setConfirmPassword("");
-    //     setAccepted(false);
-    //     setMessage(data.message || "User registered successfully.");
-    //   } catch (err) {
-    //     setError(err.message || "Something went wrong.");
-    //   } finally {
-    //     setLoading(false);
-    //   }
+      try {
+        
+        const response = await api.post("/auth/register", payload);
+        
+      } catch (err) {
+        console.log(error.message);
+        
+      }
   };
 
   return (
@@ -198,14 +170,11 @@ const Register = () => {
 
           <button
             type="submit"
-            disabled={!accepted || loading}
             className="w-full rounded-md bg-(--color-primary) py-2 text-lg text-white disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {loading ? "Registering..." : "Register"}
           </button>
 
           <p className="text-center">
-            Already registered?{" "}
             <button
               type="button"
               onClick={() => navigate("/login")}
