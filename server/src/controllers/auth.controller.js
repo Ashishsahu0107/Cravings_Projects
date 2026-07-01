@@ -65,7 +65,7 @@ export const LoginUser = async (req, res, next) => {
             return next(error);
         }
 
-        const isVerified = await bcrypt.compare(password, existingUser.password)
+        const isVerified = await bcrypt.compare(password, existingUser.password);
 
         if (!isVerified) {
             const error = new Error("Incorrect Password");
@@ -73,7 +73,7 @@ export const LoginUser = async (req, res, next) => {
             return next(error);
         }
 
-        res.status(200).json({
+        res.status(201).json({
             message: "WelCome Back",
             data: existingUser,
         });

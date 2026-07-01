@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../config/api.config.js";
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -44,7 +45,8 @@ const Register = () => {
     try {
       const res = await api.post("/auth/register", payload);
 
-      alert(res.data.message);
+      // alert(res.data.message);
+      toast.success('Register Successfully  !');
 
       setRegisterData({
         fullName: "",
@@ -58,6 +60,7 @@ const Register = () => {
 
       navigate("/login");
     } catch (err) {
+      toast.error("Register Failed!");
       setError(err.response?.data?.message || "Registration Failed");
     }
   };
@@ -66,8 +69,8 @@ const Register = () => {
     "border border-(--color-primary) p-2 rounded outline-none focus:ring-2 focus:ring-(--color-primary)";
 
   return (
-    <main className="min-h-[90vh] flex items-center justify-center bg-[url('/commonBG.avif')] bg-cover bg-center p-6">
-      <div className="w-full max-w-lg bg-white rounded-lg shadow-lg p-8">
+    <main className="min-h-[90vh] flex items-center justify-end bg-[url('/commonBG.avif')] bg-cover bg-center p-6">
+      <div className="w-full max-w-lg bg-white rounded-lg shadow-lg p-6 me-3">
 
         <h1 className="text-3xl font-bold text-center text-(--color-primary)">
           Create Account
