@@ -52,7 +52,7 @@ const OrderNow = () => {
                     ))}
                   </div>
                 </div>
-                <button className="w-full rounded-lg bg-(--color-primary) px-5 py-3 font-bold text-white transition hover:bg-orange-800">
+                <button className="w-full rounded-lg bg-(--color-primary) px-5 py-3 font-bold text-white transition hover:bg-primary">
                   Add To Cart
                 </button>
               </div>

@@ -38,6 +38,7 @@ const Contact = () => {
 
       setSent(true);
       setForm(initialForm);
+      console.log(res.data.data);
 
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");

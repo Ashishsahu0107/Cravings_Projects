@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../config/api.config.js";
+import toast from 'react-hot-toast';
 
 const Login = () => {
   const navigate = useNavigate("");
@@ -29,17 +30,13 @@ const Login = () => {
     try {
       const res = await api.post("/auth/login", payload);
 
-      alert(res.data.message);
-      setLoginData({
-        email: "",
-        password: "",
-      })
-      navigate("/");
-    } catch (err) {
-      alert("Login Failed", err.message);
+      toast.success(res.data.message);
+      sessionStorage.setItem("UserData", JSON.stringify(res.data.data));
+      navigate("/user/dashboard");
+    } catch (error) {
+      toast.error("This didn't work.");
+      alert("Login Failed", error.message);
     }
-
-
   };
 
   return (
