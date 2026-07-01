@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../config/api.config.js";
 import toast from 'react-hot-toast';
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Login = () => {
+  const { setUser, setIsLogin } = useAuth();
   const navigate = useNavigate("");
   const [loginData, setLoginData] = useState({
     email: "",
@@ -32,6 +34,8 @@ const Login = () => {
 
       toast.success(res.data.message);
       sessionStorage.setItem("UserData", JSON.stringify(res.data.data));
+      setUser(res.data.data);
+      setIsLogin(true);
       navigate("/user/dashboard");
     } catch (error) {
       toast.error("This didn't work.");

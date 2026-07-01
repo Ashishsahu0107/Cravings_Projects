@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaPalette } from 'react-icons/fa';
 import LogoHeader from '../assets/headerLogo.png'
+import { useAuth } from '../context/AuthContext.jsx';
+
 
 const themeOptions = [
     { value: 'light', label: 'Light' },
@@ -16,10 +18,19 @@ const themeOptions = [
 
 
 const Header = () => {
+    const navigate = useNavigate();
+    const { user, setIsLogin, isLogin, setUser } = useAuth();
     const [theme, setTheme] = useState(() => {
         const savedTheme = localStorage.getItem('cravings-theme') || 'light';
         return themeOptions.some((option) => option.value === savedTheme) ? savedTheme : 'light';
     });
+
+    const handleLogout = () => {
+        setIsLogin(false);
+        sessionStorage.removeItem("UserData");
+        setUser(false);
+        navigate("/login");
+    };
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
@@ -30,7 +41,7 @@ const Header = () => {
         <>
             <nav className='flex sticky top-0 z-99 justify-between px-6 md:px-12 h-16 items-center bg-(--color-primary) gap-4'>
                 <Link to={"./"}>
-                    <img src={LogoHeader} alt="header-images" className='h-14 '/>
+                    <img src={LogoHeader} alt="header-images" className='h-14 ' />
                 </Link>
                 <div className='flex items-center gap-3'>
                     <label className='flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-white'>
@@ -49,8 +60,29 @@ const Header = () => {
                             ))}
                         </select>
                     </label>
-                    <Link to='./login' className='px-3 py-1 hover:outline  rounded-md text-white text-decoration-none'>Login</Link>
-                    <Link to='/register/customer' className='px-3 py-1 bg-white rounded-md text-(--color-primary) text-decoration-none flex items-center hover:bg-transparent hover:text-white hover:outline '>Register</Link>
+
+                    {
+                        isLogin ?
+                            <>
+                                <div className='flex items-center gap-4 '>
+                                    <span className=' text-white'>{user.fullName}</span>
+                                        <Link to='/user/dashboard' className='p-2 bg-white rounded-md text-(--color-primary) text-decoration-none flex items-center hover:outline '>Dashboard</Link>
+                                        <img src={user.photo} alt={user.fullName}  className='w-15 h-15 rounded-full object-cover '/>
+                                    <div>
+                                        <button onClick={handleLogout} className='p-2 bg-white rounded-md text-(--color-primary) text-decoration-none'>Logout</button>
+                                        
+                                    </div>
+                                </div>
+
+                            </>
+                            :
+                            <>
+                                <Link to='./login' className='px-3 py-1 hover:outline  rounded-md text-white text-decoration-none'>Login</Link>
+                                <Link to='/register' className='px-3 py-1 bg-white rounded-md text-(--color-primary) text-decoration-none flex items-center hover:bg-transparent hover:text-white hover:outline '>Register</Link>
+
+                            </>
+                    }
+
                 </div>
             </nav>
         </>
