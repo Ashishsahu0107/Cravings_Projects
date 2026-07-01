@@ -18,10 +18,13 @@ import RiderDashboard from './pages/RiderDashboard'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
 import SiteMap from './pages/SiteMap'
+import {Toaster} from 'react-hot-toast';
+import UserDashboard from './pages/dashboard/UserDashboard'
 
 const App = () => {
   return (
     <BrowserRouter>
+      <Toaster/>
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
@@ -45,6 +48,12 @@ const App = () => {
         <Route path='/privacy-policy' element={<PrivacyPolicy />} />
         <Route path='/terms-of-service' element={<TermsOfService />} />
         <Route path='/site-map' element={<SiteMap />} />
+
+
+        {/* Dashboard routes  */}
+
+        <Route path='/user/dashboard' element={<UserDashboard />} />
+
       </Routes>
       <Footer />
     </BrowserRouter>
