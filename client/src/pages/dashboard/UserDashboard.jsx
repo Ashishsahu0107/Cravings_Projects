@@ -18,7 +18,7 @@ const UserDashboard = () => {
                 <div className='w-1/6 border border-base-300'>
                     <Sidebar active={ active } setActive={setActive} />
                 </div>
-                <div className='w-5/6 h-full border border-green-400 p-4'>
+                <div className='w-5/6 h-full border border-base-300 p-4'>
                     {active === "Overview" && <OverView />}
                     {active === "Order" && <Order />}
                     {active === "Wishlist" && <Wishlist />} 
