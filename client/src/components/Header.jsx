@@ -20,6 +20,7 @@ const themeOptions = [
 const Header = () => {
   const navigate = useNavigate();
   const { user, setIsLogin, isLogin, setUser } = useAuth();
+
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem("cravings-theme") || "light";
     return themeOptions.some((option) => option.value === savedTheme)
@@ -27,10 +28,11 @@ const Header = () => {
       : "light";
   });
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await fetch('/api/logout', { method: 'POST' });
     setIsLogin(false);
     sessionStorage.removeItem("UserData");
-    setUser(false);
+    setUser(null);
     navigate("/login");
   };
 
