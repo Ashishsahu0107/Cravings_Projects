@@ -1,63 +1,220 @@
-import { FaClock, FaMapMarkerAlt, FaStar } from "react-icons/fa";
+import { useMemo, useState } from "react";
+import { FaClock, FaMapMarkerAlt, FaStar, FaShoppingCart, FaTrash } from "react-icons/fa";
 import { restaurants } from "../data/siteData";
+import api from "../config/api.config.js";
+import toast from "react-hot-toast";
 
 const OrderNow = () => {
+  const [selectedRestaurant, setSelectedRestaurant] = useState(restaurants[0]);
+  const [cartItems, setCartItems] = useState([]);
+  const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const cartTotal = useMemo(
+    () => cartItems.reduce((sum, item) => sum + item.qty * item.price, 0),
+    [cartItems]
+  );
+
+  const addToCart = (itemName) => {
+    const price = 120;
+    setCartItems((prev) => {
+      const exists = prev.find((item) => item.name === itemName);
+      if (exists) {
+        return prev.map((item) =>
+          item.name === itemName ? { ...item, qty: item.qty + 1 } : item
+        );
+      }
+      return [...prev, { name: itemName, qty: 1, price }];
+    });
+    toast.success(`${itemName} added to cart`);
+  };
+
+  const decreaseQty = (name) => {
+    setCartItems((prev) =>
+      prev
+        .map((item) => (item.name === name ? { ...item, qty: item.qty - 1 } : item))
+        .filter((item) => item.qty > 0)
+    );
+  };
+
+  const removeItem = (name) => {
+    setCartItems((prev) => prev.filter((item) => item.name !== name));
+  };
+
+  const handlePlaceOrder = async () => {
+    if (!cartItems.length) {
+      toast.error("Add items to cart first.");
+      return;
+    }
+    if (!deliveryAddress.trim()) {
+      toast.error("Enter a delivery address.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      await api.post("/orders", {
+        restaurantId: selectedRestaurant.id,
+        restaurantName: selectedRestaurant.name,
+        items: cartItems,
+        totalPrice: cartTotal,
+        deliveryAddress,
+      });
+      toast.success("Order placed successfully!");
+      setCartItems([]);
+      setDeliveryAddress("");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Unable to place order.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-(--color-base-100)">
-      <section className="relative flex h-[45vh] items-center justify-center bg-[url('/commonBG.avif')] bg-cover bg-center text-center">
+      <section className="relative flex h-[40vh] items-center justify-center bg-[url('/commonBG.avif')] bg-cover bg-center text-center">
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative z-10 px-6">
           <h1 className="mb-3 text-4xl font-bold text-white md:text-5xl">Order Now</h1>
           <p className="mx-auto max-w-2xl text-lg text-white/80">
-            Browse restaurants, pick your favourites, and enjoy fresh food delivered fast.
+            Choose a restaurant, add tasty items to your cart, and place your order in seconds.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-(--color-neutral)">Restaurants Near You</h2>
-          <p className="mt-2 text-(--color-secondary)">Fresh meals, reliable delivery, and easy ordering.</p>
-        </div>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {restaurants.map((restaurant) => (
-            <article key={restaurant.id} className="overflow-hidden rounded-xl bg-white shadow-md">
-              <img src={restaurant.image} alt={restaurant.name} className="h-48 w-full object-cover" />
-              <div className="p-5">
-                <div className="mb-2 flex items-start justify-between gap-3">
-                  <h3 className="text-xl font-bold text-(--color-neutral)">{restaurant.name}</h3>
-                  <span className="flex items-center gap-1 rounded-full bg-(--color-primary) px-3 py-1 text-sm font-bold text-white">
-                    <FaStar /> {restaurant.rating}
-                  </span>
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="grid gap-8 xl:grid-cols-[2fr_1fr]">
+          <div className="space-y-8">
+            <div className="rounded-3xl bg-white p-6 shadow-sm">
+              <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-3xl font-bold text-(--color-neutral)">Restaurants Near You</h2>
+                  <p className="mt-2 text-(--color-secondary)">Select a restaurant to view menu items and start ordering.</p>
                 </div>
-                <p className="mb-3 text-sm leading-6 text-(--color-secondary)">{restaurant.description}</p>
-                <div className="mb-4 flex flex-wrap gap-2">
-                  {restaurant.cuisines.map((cuisine) => (
-                    <span key={cuisine} className="rounded bg-(--color-base-200) px-3 py-1 text-xs text-(--color-base-content)">
-                      {cuisine}
-                    </span>
+                <div className="flex flex-wrap gap-2">
+                  {restaurants.map((restaurant) => (
+                    <button
+                      key={restaurant.id}
+                      onClick={() => setSelectedRestaurant(restaurant)}
+                      className={`rounded-full px-4 py-2 text-sm font-semibold transition ${selectedRestaurant.id === restaurant.id ? 'bg-(--color-primary) text-white' : 'bg-(--color-base-200) text-(--color-neutral)'}`}
+                    >
+                      {restaurant.name}
+                    </button>
                   ))}
                 </div>
-                <div className="mb-4 grid grid-cols-2 gap-3 text-sm text-(--color-secondary)">
-                  <span className="flex items-center gap-2"><FaClock /> {restaurant.deliveryTime}</span>
-                  <span className="flex items-center gap-2"><FaMapMarkerAlt /> {restaurant.city}</span>
-                </div>
-                <div className="mb-4 rounded-lg bg-(--color-base-100) p-3">
-                  <p className="mb-2 text-sm font-semibold text-(--color-neutral)">Popular Items</p>
-                  <div className="flex flex-wrap gap-2">
-                    {restaurant.menu.map((item) => (
-                      <span key={item} className="rounded bg-white px-2 py-1 text-xs text-(--color-base-content)">
-                        {item}
-                      </span>
+              </div>
+
+              <div className="grid gap-6 lg:grid-cols-2">
+                <article className="overflow-hidden rounded-3xl border border-(--color-base-200)">
+                  <img src={selectedRestaurant.image} alt={selectedRestaurant.name} className="h-60 w-full object-cover" />
+                  <div className="p-6">
+                    <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+                      <div>
+                        <h3 className="text-2xl font-bold text-(--color-neutral)">{selectedRestaurant.name}</h3>
+                        <p className="text-sm text-(--color-secondary)">{selectedRestaurant.description}</p>
+                      </div>
+                      <div className="flex items-center gap-3 rounded-full bg-(--color-base-200) px-4 py-2 text-sm text-(--color-neutral)">
+                        <FaStar className="text-(--color-primary)" /> {selectedRestaurant.rating}
+                      </div>
+                    </div>
+                    <div className="mb-4 grid grid-cols-2 gap-3 text-sm text-(--color-secondary)">
+                      <span className="flex items-center gap-2"><FaClock /> {selectedRestaurant.deliveryTime}</span>
+                      <span className="flex items-center gap-2"><FaMapMarkerAlt /> {selectedRestaurant.city}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedRestaurant.cuisines.map((cuisine) => (
+                        <span key={cuisine} className="rounded-full bg-(--color-base-200) px-3 py-1 text-xs text-(--color-neutral)">{cuisine}</span>
+                      ))}
+                    </div>
+                  </div>
+                </article>
+
+                <article className="rounded-3xl border border-(--color-base-200) bg-(--color-base-100) p-6 shadow-sm">
+                  <h3 className="mb-4 text-lg font-semibold text-(--color-neutral)">Menu</h3>
+                  <div className="space-y-3">
+                    {selectedRestaurant.menu.map((item) => (
+                      <div key={item} className="flex items-center justify-between rounded-3xl bg-white px-4 py-3 shadow-sm">
+                        <div>
+                          <p className="font-semibold text-(--color-neutral)">{item}</p>
+                          <p className="text-sm text-(--color-secondary)">₹120</p>
+                        </div>
+                        <button
+                          onClick={() => addToCart(item)}
+                          className="rounded-full bg-(--color-primary) px-4 py-2 text-sm font-semibold text-white hover:bg-primary-focus"
+                        >
+                          Add
+                        </button>
+                      </div>
                     ))}
                   </div>
-                </div>
-                <button className="w-full rounded-lg bg-(--color-primary) px-5 py-3 font-bold text-white transition hover:bg-primary">
-                  Add To Cart
-                </button>
+                </article>
               </div>
-            </article>
-          ))}
+            </div>
+          </div>
+
+          <aside className="space-y-6">
+            <div className="rounded-3xl bg-white p-6 shadow-sm">
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-(--color-neutral)">Your Cart</h2>
+                  <p className="text-sm text-(--color-secondary)">Review your items before placing the order.</p>
+                </div>
+                <FaShoppingCart className="text-2xl text-(--color-primary)" />
+              </div>
+
+              {cartItems.length ? (
+                <div className="space-y-3">
+                  {cartItems.map((item) => (
+                    <div key={item.name} className="rounded-3xl border border-(--color-base-200) bg-(--color-base-100) p-4">
+                      <div className="flex items-center justify-between gap-4">
+                        <div>
+                          <p className="font-semibold text-(--color-neutral)">{item.name}</p>
+                          <p className="text-sm text-(--color-secondary)">₹{item.price} x {item.qty}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button type="button" onClick={() => decreaseQty(item.name)} className="rounded-full border px-3 py-1 text-sm">-</button>
+                          <span>{item.qty}</span>
+                          <button type="button" onClick={() => addToCart(item.name)} className="rounded-full border px-3 py-1 text-sm">+</button>
+                        </div>
+                      </div>
+                      <div className="mt-3 flex items-center justify-between text-sm text-(--color-secondary)">
+                        <span>Total</span>
+                        <span>₹{item.price * item.qty}</span>
+                      </div>
+                      <button type="button" onClick={() => removeItem(item.name)} className="mt-3 text-sm font-semibold text-(--color-primary)">Remove</button>
+                    </div>
+                  ))}
+
+                  <div className="rounded-3xl bg-(--color-base-200) p-4">
+                    <div className="flex items-center justify-between text-sm text-(--color-secondary)">
+                      <span>Subtotal</span>
+                      <span>₹{cartTotal}</span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-(--color-secondary)">Your cart is empty. Add a menu item to begin.</p>
+              )}
+
+              <div className="mt-6 space-y-3">
+                <label className="block text-sm font-medium text-(--color-neutral)">Delivery Address</label>
+                <input
+                  value={deliveryAddress}
+                  onChange={(e) => setDeliveryAddress(e.target.value)}
+                  className="w-full rounded-3xl border border-(--color-base-200) bg-white px-4 py-3 text-sm outline-none"
+                  placeholder="Enter delivery address"
+                />
+              </div>
+
+              <button
+                onClick={handlePlaceOrder}
+                disabled={isSubmitting}
+                className="mt-6 w-full rounded-3xl bg-(--color-primary) px-6 py-4 text-sm font-semibold text-white transition hover:bg-primary-focus disabled:opacity-60"
+              >
+                {isSubmitting ? "Placing order..." : "Place Order"}
+              </button>
+            </div>
+          </aside>
         </div>
       </section>
     </main>

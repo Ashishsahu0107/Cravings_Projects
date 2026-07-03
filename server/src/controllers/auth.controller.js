@@ -1,11 +1,10 @@
 import User from "../models/user.model.js";
 import bcrypt from 'bcrypt';
+import { generateToken } from "../utils/auth.service.js";
 
 export const RegisterUser = async (req, res, next) => {
 
     try {
-        // Controller Logic
-
         const { fullName, email, password, phone, gender, dob } = req.body;
 
         if (!fullName || !email || !password || !phone || !gender || !dob) {
@@ -38,7 +37,10 @@ export const RegisterUser = async (req, res, next) => {
             photo,
         });
 
-        res.status(201).json({ message: "User Created Successfully", data: newUser });
+        const userResponse = newUser.toObject();
+        delete userResponse.password;
+
+        res.status(201).json({ message: "User Created Successfully", data: userResponse });
 
     } catch (error) {
         console.log(error.message);
@@ -48,7 +50,6 @@ export const RegisterUser = async (req, res, next) => {
 
 export const LoginUser = async (req, res, next) => {
     try {
-
         const { email, password } = req.body;
 
         if (!email || !password) {
@@ -73,9 +74,14 @@ export const LoginUser = async (req, res, next) => {
             return next(error);
         }
 
-        res.status(201).json({
+        await generateToken(existingUser, res);
+
+        const userResponse = existingUser.toObject();
+        delete userResponse.password;
+
+        res.status(200).json({
             message: "WelCome Back",
-            data: existingUser,
+            data: userResponse,
         });
 
     } catch (error) {
@@ -84,11 +90,47 @@ export const LoginUser = async (req, res, next) => {
     }
 };
 
-
 export const LogoutUser = (req, res, next) => {
-
     try {
-        
+        res.clearCookie("CravingToken", {maxAge : 0});
+        res.status(200).json({ message: "Logged out successfully" });
+    } catch (error) {
+        console.log(error.message);
+        next(error);
+    }
+};
+
+export const UpdateUserProfile = async (req, res, next) => {
+    try {
+        const userId = req.user?._id || req.body.userId;
+
+        if (!userId) {
+            const error = new Error("User id is required");
+            error.statusCode = 400;
+            return next(error);
+        }
+
+        const { fullName, phone } = req.body;
+        const updates = {};
+
+        if (fullName !== undefined) updates.fullName = fullName.trim();
+        if (phone !== undefined) updates.phone = phone.trim();
+
+        if (Object.keys(updates).length === 0) {
+            const error = new Error("Nothing to update");
+            error.statusCode = 400;
+            return next(error);
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true }).select("-password");
+
+        if (!updatedUser) {
+            const error = new Error("User not found");
+            error.statusCode = 404;
+            return next(error);
+        }
+
+        res.status(200).json({ message: "Profile updated successfully", data: updatedUser });
     } catch (error) {
         console.log(error.message);
         next(error);
