@@ -1,10 +1,10 @@
 const TermsOfService = () => {
   return (
-    <main className="min-h-screen bg-(--color-base-100) px-6 py-14">
-      <section className="mx-auto max-w-4xl rounded-xl bg-white p-8 shadow-sm">
-        <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-(--color-primary)">Cravings</p>
+    <main className="min-h-screen bg-base-100 px-6 py-14">
+      <section className="mx-auto max-w-4xl rounded-xl bg-base-100 p-8 shadow-sm">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary">Cravings</p>
         <h1 className="mb-6 text-4xl font-bold text-(--color-neutral)">Terms of Service</h1>
-        <div className="space-y-6 leading-relaxed text-(--color-secondary)">
+        <div className="space-y-6 leading-relaxed text-secondary">
           <p>
             By using Cravings, you agree to provide accurate account information and use the platform only for lawful food ordering, delivery, and restaurant services.
           </p>

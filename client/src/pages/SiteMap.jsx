@@ -9,18 +9,18 @@ const groups = [
 
 const SiteMap = () => {
   return (
-    <main className="min-h-screen bg-(--color-base-100) px-6 py-14">
+    <main className="min-h-screen bg-base-100 px-6 py-14">
       <section className="mx-auto max-w-5xl">
-        <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-(--color-primary)">Cravings</p>
+        <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-primary">Cravings</p>
         <h1 className="mb-8 text-4xl font-bold text-(--color-neutral)">Site Map</h1>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {groups.map(([title, links]) => (
-            <div key={title} className="rounded-xl bg-white p-6 shadow-sm">
+            <div key={title} className="rounded-xl bg-base-100 p-6 shadow-sm">
               <h2 className="mb-4 text-xl font-bold text-(--color-neutral)">{title}</h2>
               <ul className="space-y-3">
                 {links.map(([label, path]) => (
                   <li key={path}>
-                    <Link to={path} className="text-(--color-secondary) transition hover:text-(--color-primary)">
+                    <Link to={path} className="text-secondary transition hover:text-primary">
                       {label}
                     </Link>
                   </li>
