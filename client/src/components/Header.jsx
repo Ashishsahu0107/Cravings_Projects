@@ -43,12 +43,12 @@ const Header = () => {
 
   return (
     <>
-      <nav className="flex sticky top-0 z-99 justify-between px-6 md:px-12 h-16 items-center bg-(--color-primary) gap-4">
+      <nav className="flex sticky top-0 z-99 justify-between px-6 md:px-12 h-16 items-center bg-primary gap-4">
         <Link to={"./"}>
           <img src={LogoHeader} alt="header-images" className="h-14 " />
         </Link>
         <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-white">
+          <label className="flex items-center gap-2 rounded-md border border-white/20 bg-base-100/10 px-3 py-1 text-sm text-white">
             <FaPalette className="shrink-0" />
             <span className="hidden sm:inline">Theme</span>
             <select
@@ -75,7 +75,7 @@ const Header = () => {
                 <span className=" text-white">{user.fullName}</span>
                 <Link
                   to="/user/dashboard"
-                  className="p-2 bg-white rounded-md text-(--color-primary) text-decoration-none flex items-center hover:outline "
+                  className="p-2 bg-base-100 rounded-md text-primary text-decoration-none flex items-center hover:outline "
                 >
                   Dashboard
                 </Link>
@@ -87,7 +87,7 @@ const Header = () => {
                 <div>
                   <button
                     onClick={handleLogout}
-                    className="p-2 bg-white rounded-md text-(--color-primary) text-decoration-none"
+                    className="p-2 bg-base-100 rounded-md text-primary text-decoration-none"
                   >
                     <LogOut />
                   </button>
@@ -104,7 +104,7 @@ const Header = () => {
               </Link>
               <Link
                 to="/register"
-                className="px-3 py-1 bg-white rounded-md text-(--color-primary) text-decoration-none flex items-center hover:bg-transparent hover:text-white hover:outline "
+                className="px-3 py-1 bg-base-100 rounded-md text-primary text-decoration-none flex items-center hover:bg-transparent hover:text-white hover:outline "
               >
                 Register
               </Link>

@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   const linkClass =
-    "text-sm hover:text-(--color-primary) transition-colors duration-200 cursor-pointer";
+    "text-sm hover:text-primary transition-colors duration-200 cursor-pointer";
   const bottomLinkClass =
-    "text-sm text-(--color-neutral-content) hover:text-(--color-primary) transition-colors duration-200";
+    "text-sm text-(--color-neutral-content) hover:text-primary transition-colors duration-200";
 
   return (
     <>
