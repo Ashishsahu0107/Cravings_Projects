@@ -49,9 +49,9 @@ const Contact = () => {
 
   return (
     <main className="flex h-[90vh] items-center justify-start bg-[url('/contactPage.jpg')] bg-cover bg-center p-6 md:p-10 md:ps-30">
-      <div className="max-h-[85vh] w-full max-w-md overflow-y-auto rounded-lg bg-white px-8 py-6 shadow-md md:px-10">
-        <h1 className="mb-2 text-center text-3xl font-bold text-(--color-primary)">Contact Us</h1>
-        <p className="mb-5 text-center text-(--color-secondary)">Have a question? We'd love to hear from you.</p>
+      <div className="max-h-[85vh] w-full max-w-md overflow-y-auto rounded-lg bg-base-100 px-8 py-6 shadow-md md:px-10">
+        <h1 className="mb-2 text-center text-3xl font-bold text-primary">Contact Us</h1>
+        <p className="mb-5 text-center text-secondary">Have a question? We'd love to hear from you.</p>
         {sent && (
           <p className="mb-4 rounded-md bg-(--color-success) px-3 py-2 text-sm font-semibold text-white">
             Message sent. We'll get back to you soon.
@@ -71,7 +71,7 @@ const Contact = () => {
                 value={form[name]}
                 onChange={handleChange}
                 placeholder={placeholder}
-                className="w-full rounded-md border border-(--color-base-300) px-3 py-2 text-sm text-(--color-neutral) placeholder-gray-500 outline-none focus:ring-2 focus:ring-(--color-primary)"
+                className="w-full rounded-md border border-(--color-base-300) px-3 py-2 text-sm text-(--color-neutral) placeholder-gray-500 outline-none focus:ring-2 focus:ring-primary"
                 required={name !== "phone"}
               />
             </div>
@@ -82,10 +82,10 @@ const Contact = () => {
             onChange={handleChange}
             placeholder="Write your message here..."
             rows={4}
-            className="mb-6 w-full resize-none rounded-md border border-(--color-base-300) px-3 py-2 text-sm text-(--color-neutral) placeholder-gray-500 outline-none focus:ring-2 focus:ring-(--color-primary)"
+            className="mb-6 w-full resize-none rounded-md border border-(--color-base-300) px-3 py-2 text-sm text-(--color-neutral) placeholder-gray-500 outline-none focus:ring-2 focus:ring-primary"
             required
           />
-          <button type="submit" className="w-full rounded-md bg-(--color-primary) py-3 font-semibold text-white transition hover:bg-orange-700">
+          <button type="submit" className="w-full rounded-md bg-primary py-3 font-semibold text-white transition hover:bg-orange-700">
             Send Message
           </button>
         </form>

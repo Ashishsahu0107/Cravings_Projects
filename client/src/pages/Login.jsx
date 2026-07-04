@@ -46,9 +46,9 @@ const Login = () => {
   return (
     <>
       <div className='h-[90vh] bg-[url("/foodTable.webp")] bg-yellow-400 grid items-center justify-start bg-cover bg-center md:ps-30 '>
-        <div className="bg-white p-10 grid gap-8 rounded-md w-100">
+        <div className="bg-base-100 p-10 grid gap-8 rounded-md w-100">
           <div className="grid gap-3">
-            <h1 className="text-4xl text-center font-semibold text-(--color-primary) ">
+            <h1 className="text-4xl text-center font-semibold text-primary ">
               Welcome Back
             </h1>
             <p className="text-center">Login to your Cravings account</p>
@@ -65,7 +65,7 @@ const Login = () => {
                 placeholder="Enter your email"
                 value={loginData.email}
                 onChange={handleChange}
-                className="border text-(--color-primary) focus:outline focus:outline-(--color-primary) p-1 rounded focus:outline-2"
+                className="border text-primary focus:outline focus:outline-primary p-1 rounded focus:outline-2"
               />
             </div>
             <div className="grid mb-4">
@@ -79,12 +79,12 @@ const Login = () => {
                 placeholder="Enter your password"
                 value={loginData.password}
                 onChange={handleChange}
-                className="border border-(--color-primary) focus:outline focus:outline-(--color-primary) p-1 rounded focus:outline-2"
+                className="border border-primary focus:outline focus:outline-primary p-1 rounded focus:outline-2"
               />
             </div>
             <button
               type="submit"
-              className="w-full py-2 mb-4 rounded-md bg-(--color-primary) text-white text-lg"
+              className="w-full py-2 mb-4 rounded-md bg-primary text-white text-lg"
             >
               Login
             </button>
@@ -96,7 +96,7 @@ const Login = () => {
             <p className="text-center ">
               <Link
                 to='/register'
-                className="text-(--color-primary) cursor-pointer"
+                className="text-primary cursor-pointer"
               >
                 Create an account
               </Link>
