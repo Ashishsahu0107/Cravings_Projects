@@ -66,17 +66,17 @@ const Register = () => {
   };
 
   const inputClass =
-    "border border-(--color-primary) p-2 rounded outline-none focus:ring-2 focus:ring-(--color-primary)";
+    "border border-primary p-2 rounded outline-none focus:ring-2 focus:ring-primary";
 
   return (
     <main className="min-h-[90vh] flex items-center justify-end bg-[url('/commonBG.avif')] bg-cover bg-center p-6">
-      <div className="w-full max-w-lg bg-white rounded-lg shadow-lg p-6 me-3">
+      <div className="w-full max-w-lg bg-base-100 rounded-lg shadow-lg p-6 me-3">
 
-        <h1 className="text-3xl font-bold text-center text-(--color-primary)">
+        <h1 className="text-3xl font-bold text-center text-primary">
           Create Account
         </h1>
 
-        <p className="text-center mb-6 text-(--color-secondary)">
+        <p className="text-center mb-6 text-secondary">
           Register to continue
         </p>
 
@@ -190,7 +190,7 @@ const Register = () => {
               I agree to the{" "}
               <Link
                 to="/terms-of-service"
-                className="text-(--color-primary)"
+                className="text-primary"
               >
                 Terms & Conditions
               </Link>
@@ -200,7 +200,7 @@ const Register = () => {
           {/* Button */}
           <button
             type="submit"
-            className="col-span-2 bg-(--color-primary) text-white py-2 rounded hover:opacity-90"
+            className="col-span-2 bg-primary text-white py-2 rounded hover:opacity-90"
           >
             Register
           </button>
@@ -211,7 +211,7 @@ const Register = () => {
             Already have an account?{" "}
             <button
               onClick={() => navigate("/login")}
-              className="text-(--color-primary) font-semibold"
+              className="text-primary font-semibold"
             >
               Login
             </button>
