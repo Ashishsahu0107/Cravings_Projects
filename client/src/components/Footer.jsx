@@ -9,8 +9,8 @@ const Footer = () => {
 
   return (
     <>
-      <footer className="bg-(--color-neutral) text-(--color-neutral-content) py-8">
-        <div className="max-w-7xl mx-auto px-4">
+      <footer className="bg-(--color-neutral) text-(--color-neutral-content) py-8 flex justify-end mx-auto">
+        <div className=" w-full max-w-screen-xl px-8">
           <p className="text-sm text-center mb-8 text-(--color-neutral-content)">
             --- Your favorite food delivery platform connecting customers with
             restaurants and riders. ---

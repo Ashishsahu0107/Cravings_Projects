@@ -21,8 +21,8 @@ const Sidebar = () => {
 
     return (
         <>
-            <div>
-                <div className='border-b-2 text-center text-primary font-bold border-primary text-2xl p-3'>
+            <div className='max-w-62.5 fixed w-full border-base-200 border bg-base-200 h-[91vh] shadow-md'>
+                <div className='border-b-2 text-center text-primary font-bold border-primary text-2xl p-3 '>
                     User Dashboard
                 </div>
                 <div className='p-2 flex flex-col gap-3 items-center '>

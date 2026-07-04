@@ -16,6 +16,7 @@ const Setting = () => {
         if (user) {
             setFormData({
                 fullName: user.fullName || '',
+                email: user.email || '',
                 phone: user.phone || '',
             });
         }
@@ -37,6 +38,7 @@ const Setting = () => {
             const res = await api.put('/auth/profile', {
                 userId: user._id,
                 fullName: formData.fullName.trim(),
+                email: formData.email.trim(),
                 phone: formData.phone.trim(),
             });
 
@@ -62,7 +64,7 @@ const Setting = () => {
                     <img
                         src={user.photo || 'https://placehold.co/600x400?text=U'}
                         alt={user.fullName || 'User'}
-                        className="h-full w-full object-cover bg-amber-300"
+                        className="h-full w-full object-cover bg-warning"
                     />
                 </div>
                 <div>
@@ -74,7 +76,7 @@ const Setting = () => {
             {isEditing ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700">Full Name</label>
+                        <label className="mb-1 block text-sm font-medium text-secondary">Full Name</label>
                         <input
                             name="fullName"
                             value={formData.fullName}
@@ -88,6 +90,16 @@ const Setting = () => {
                         <input
                             name="phone"
                             value={formData.phone}
+                            onChange={handleChange}
+                            className="w-full rounded-md border px-3 py-2"
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+                        <input
+                            name="phone"
+                            value={formData.email}
                             onChange={handleChange}
                             className="w-full rounded-md border px-3 py-2"
                             required
@@ -108,6 +120,7 @@ const Setting = () => {
                                 setFormData({
                                     fullName: user.fullName || '',
                                     phone: user.phone || '',
+                                    email: user.email || '',
                                 });
                             }}
                             className="rounded-md border px-4 py-2"
@@ -119,8 +132,8 @@ const Setting = () => {
             ) : (
                 <div className="space-y-3">
                     <div><span className="font-medium">Name:</span> {user.fullName}</div>
-                    <div><span className="font-medium">Email:</span> {user.email}</div>
                     <div><span className="font-medium">Phone:</span> {user.phone}</div>
+                    <div><span className="font-medium">Email:</span> {user.email}</div>
                     <button
                         onClick={() => setIsEditing(true)}
                         className="rounded-md bg-amber-500 px-4 py-2 text-white"
