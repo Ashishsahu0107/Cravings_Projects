@@ -24,8 +24,8 @@ const HelpCenter = () => {
     <main className="flex min-h-[90vh] items-center justify-center bg-[url('/HelpPage.jpg')] bg-cover bg-center p-6 md:p-10">
       <div className="w-full max-w-5xl overflow-hidden rounded-xl bg-black/60 shadow-xl backdrop-blur-sm">
         <div className="flex items-center justify-center gap-2 px-10 pb-4 pt-8">
-          <FaQuestionCircle className="text-2xl text-(--color-primary)" />
-          <h1 className="text-3xl font-bold text-(--color-primary)">Help Center</h1>
+          <FaQuestionCircle className="text-2xl text-primary" />
+          <h1 className="text-3xl font-bold text-primary">Help Center</h1>
         </div>
         <p className="mb-6 px-10 text-center text-(--color-secondary-content)">Browse FAQs or submit a support ticket below.</p>
         <div className="flex flex-col divide-y divide-gray-200/80 px-0 md:flex-row md:divide-x md:divide-y-0">
@@ -33,17 +33,17 @@ const HelpCenter = () => {
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-(--color-neutral-content)">Frequently Asked Questions</h2>
             <div className="flex flex-col gap-2">
               {faqs.map(([question, answer], index) => (
-                <div key={question} className="overflow-hidden rounded-md border border-(--color-base-100)">
+                <div key={question} className="overflow-hidden rounded-md border border-base-100">
                   <button
                     type="button"
                     onClick={() => setActiveFaq(activeFaq === index ? null : index)}
-                    className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold text-(--color-neutral-content) transition hover:bg-white/50"
+                    className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold text-(--color-neutral-content) transition hover:bg-base-100/50"
                   >
                     {question}
                     <span>{activeFaq === index ? "-" : "+"}</span>
                   </button>
                   {activeFaq === index && (
-                    <p className="bg-white/30 px-4 pb-3 text-sm text-(--color-secondary-content)">{answer}</p>
+                    <p className="bg-base-100/30 px-4 pb-3 text-sm text-(--color-secondary-content)">{answer}</p>
                   )}
                 </div>
               ))}
@@ -57,17 +57,17 @@ const HelpCenter = () => {
               </p>
             )}
             <form onSubmit={handleSubmit}>
-              <input className="mb-4 w-full rounded-md border border-(--color-base-300) bg-white/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-(--color-primary)" placeholder="Enter your full name" required />
-              <input type="email" className="mb-4 w-full rounded-md border border-(--color-base-300) bg-white/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-(--color-primary)" placeholder="Enter your email" required />
-              <select className="mb-4 w-full rounded-md border border-(--color-base-300) bg-white/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-(--color-primary)" required>
+              <input className="mb-4 w-full rounded-md border border-(--color-base-300) bg-base-100/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your full name" required />
+              <input type="email" className="mb-4 w-full rounded-md border border-(--color-base-300) bg-base-100/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your email" required />
+              <select className="mb-4 w-full rounded-md border border-(--color-base-300) bg-base-100/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary" required>
                 <option value="">Select issue type</option>
                 {issueTypes.map((type) => (
                   <option key={type}>{type}</option>
                 ))}
               </select>
-              <input className="mb-4 w-full rounded-md border border-(--color-base-300) bg-white/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-(--color-primary)" placeholder="e.g. ORD-00123" />
-              <textarea className="mb-6 w-full resize-none rounded-md border border-(--color-base-300) bg-white/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-(--color-primary)" rows={4} placeholder="Please describe the problem in detail..." required />
-              <button className="w-full rounded-md bg-(--color-primary) py-3 font-semibold text-white transition hover:bg-orange-700">
+              <input className="mb-4 w-full rounded-md border border-(--color-base-300) bg-base-100/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary" placeholder="e.g. ORD-00123" />
+              <textarea className="mb-6 w-full resize-none rounded-md border border-(--color-base-300) bg-base-100/60 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary" rows={4} placeholder="Please describe the problem in detail..." required />
+              <button className="w-full rounded-md bg-primary py-3 font-semibold text-white transition hover:bg-orange-700">
                 Submit Ticket
               </button>
             </form>
