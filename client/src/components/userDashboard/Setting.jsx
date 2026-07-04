@@ -56,7 +56,7 @@ const Setting = () => {
     }
 
     return (
-        <div className="max-w-2xl rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="max-w-2xl rounded-xl border border-base-200 bg-primary-content p-6 shadow-md">
             <div className="mb-6 flex items-center gap-4">
                 <div className="h-16 w-16 overflow-hidden rounded-full">
                     <img

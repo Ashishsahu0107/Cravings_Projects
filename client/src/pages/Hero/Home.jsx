@@ -26,7 +26,7 @@ const Home = () => {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link
-                to="/register/customer"
+                to="/register"
                 className="rounded-lg bg-(--color-primary) px-8 py-3 font-semibold text-(--color-primary-content) transition hover:opacity-90"
               >
                 Sign Up
