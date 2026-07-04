@@ -1,8 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaStar } from "react-icons/fa";
+import api from "../../config/api.config.js";
 import { restaurants, stats, testimonials } from "../../data/siteData";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const handleExploreMenu = async (restaurant) => {
+    try {
+      const res = await api.get(`/restaurants/${restaurant.id}/menu`);
+      const menu = res?.data || restaurant.menu || [];
+      navigate("/order-now", { state: { restaurant: { ...restaurant, menu } } });
+    } catch (err) {
+      navigate("/order-now", { state: { restaurant } });
+    }
+  };
+
   return (
     <main className="min-h-screen bg-base-100">
       <section className="relative overflow-hidden py-16 text-primary-content md:py-40">
@@ -59,6 +72,14 @@ const Home = () => {
             <p className="text-primary-content/70">
               {restaurants.length} restaurants available
             </p>
+            <div className="mt-4 flex justify-end">
+              <Link
+                to="/restaurant-dashboard"
+                className="rounded-lg bg-base-100 px-4 py-2 text-sm font-semibold text-base-content transition hover:bg-base-200"
+              >
+                Add Menu
+              </Link>
+            </div>
           </div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {restaurants.map((restaurant) => (
@@ -95,12 +116,12 @@ const Home = () => {
                     ))}
                   </div>
                   <div className="mt-auto border-t border-base-200 pt-3">
-                    <Link
-                      to="/order-now"
+                    <button
+                      onClick={() => handleExploreMenu(restaurant)}
                       className="block w-full rounded-lg bg-primary px-4 py-2 text-center font-semibold text-primary-content transition hover:opacity-90"
                     >
                       Explore Menu
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </article>

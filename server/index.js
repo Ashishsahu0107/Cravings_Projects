@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import AuthRouter from './src/routers/auth.route.js';
 import PublicRouter from './src/routers/public.route.js';
 import OrderRouter from './src/routers/order.route.js';
+import RestaurantRouter from './src/routers/restaurant.route.js';
 import connectDB from './src/config/dbConnection.config.js';
 import morgan from 'morgan';
 import cors from 'cors';
@@ -21,6 +22,7 @@ app.use(morgan("dev"));
 app.use("/auth", AuthRouter);
 app.use("/public", PublicRouter);
 app.use("/orders", OrderRouter);
+app.use("/restaurants", RestaurantRouter);
 
 // Default API
 app.get("/", (req, res) => {
