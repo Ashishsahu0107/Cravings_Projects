@@ -1,11 +1,19 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { FaClock, FaMapMarkerAlt, FaStar, FaShoppingCart, FaTrash } from "react-icons/fa";
 import { restaurants } from "../data/siteData";
+import { useLocation } from "react-router-dom";
 import api from "../config/api.config.js";
 import toast from "react-hot-toast";
 
 const OrderNow = () => {
   const [selectedRestaurant, setSelectedRestaurant] = useState(restaurants[0]);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location?.state?.restaurant) {
+      setSelectedRestaurant(location.state.restaurant);
+    }
+  }, [location]);
   const [cartItems, setCartItems] = useState([]);
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -132,7 +140,7 @@ const OrderNow = () => {
                 <article className="rounded-3xl border border-base-200 bg-base-100 p-6 shadow-sm">
                   <h3 className="mb-4 text-lg font-semibold text-(--color-neutral)">Menu</h3>
                   <div className="space-y-3">
-                    {selectedRestaurant.menu.map((item) => (
+                    {(selectedRestaurant.menu || []).map((item) => (
                       <div key={item} className="flex items-center justify-between rounded-3xl bg-base-100 px-4 py-3 shadow-sm">
                         <div>
                           <p className="font-semibold text-(--color-neutral)">{item}</p>
