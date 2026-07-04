@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Hero/Home'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -20,6 +20,10 @@ import TermsOfService from './pages/TermsOfService'
 import SiteMap from './pages/SiteMap'
 import {Toaster} from 'react-hot-toast';
 import UserDashboard from './pages/dashboard/UserDashboard'
+import OverView from './components/userDashboard/OverView'
+import Order from './components/userDashboard/Order'
+import Wishlist from './components/userDashboard/Wishlist'
+import Setting from './components/userDashboard/Setting'
 
 const App = () => {
   return (
@@ -50,8 +54,13 @@ const App = () => {
 
 
         {/* Dashboard routes  */}
-
-        <Route path='/user/dashboard' element={<UserDashboard />} />
+        <Route path='/user/dashboard' element={<UserDashboard />}>
+          <Route index element={<Navigate to="overview" replace />} />
+          <Route path='overview' element={<OverView />} />
+          <Route path='order' element={<Order />} />
+          <Route path='wishlist' element={<Wishlist />} />
+          <Route path='setting' element={<Setting />} />
+        </Route>
 
       </Routes>
       <Footer />

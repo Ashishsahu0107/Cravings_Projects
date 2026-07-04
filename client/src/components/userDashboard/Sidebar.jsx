@@ -1,15 +1,23 @@
 import React from 'react'
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FaBorderAll } from "react-icons/fa6";
 import { MdOutlineDashboard, MdOutlineFavorite, MdSettingsSuggest } from "react-icons/md";
 
 const MenuItems = [
-    { name: "Overview", icon: <MdOutlineDashboard /> },
-    { name: "Order", icon: <FaBorderAll /> },
-    { name: "Wishlist", icon: <MdOutlineFavorite /> },
-    { name: "Setting", icon: <MdSettingsSuggest /> },
+    { name: "Overview", path: "overview", icon: <MdOutlineDashboard /> },
+    { name: "Order", path: "order", icon: <FaBorderAll /> },
+    { name: "Wishlist", path: "wishlist", icon: <MdOutlineFavorite /> },
+    { name: "Setting", path: "setting", icon: <MdSettingsSuggest /> },
 ]
 
-const Sidebar = ({ active, setActive }) => {
+const Sidebar = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const currentPath = location.pathname.split('/').pop();
+
+    const handleNavigation = (path) => {
+        navigate(`/user/dashboard/${path}`);
+    }
 
     return (
         <>
@@ -21,8 +29,8 @@ const Sidebar = ({ active, setActive }) => {
                     {MenuItems.map((item, idx) => (
                         <button
                             key={idx}
-                            onClick={() => setActive(item.name)}
-                            className={`flex items-center hover:border-primary w-full gap-2 text-xl p-2 rounded-sm border ${active === item.name && "bg-primary text-primary-content"}`}>
+                            onClick={() => handleNavigation(item.path)}
+                            className={`flex items-center hover:border-primary w-full gap-2 text-xl p-2 rounded-sm border ${currentPath === item.path && "bg-primary text-primary-content"}`}>
                             {item.icon}
                             <span>{item.name}</span>
                         </button>
