@@ -30,16 +30,17 @@ const Order = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <>
+      <div className="space-y-6">
       <h2 className="text-2xl font-bold text-base-content">My Orders</h2>
       {orders.map((order) => (
-        <div key={order._id} className="rounded-md border border-base-200 bg-primary p-6 shadow-sm">
+        <div key={order._id} className="rounded-md border border-base-200  bg-primary-content p-6 shadow-sm">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h3 className="text-xl font-semibold text-natural">{order.restaurantName}</h3>
               <p className="text-sm text-secondary">Ordered on {new Date(order.createdAt).toLocaleDateString()}</p>
             </div>
-            <span className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-base-content">{order.status}</span>
+            <span className="rounded-sm bg-primary px-4 py-2 text-sm border font-semibold text-primary-content">{order.status}</span>
           </div>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <div>
@@ -65,6 +66,7 @@ const Order = () => {
         </div>
       ))}
     </div>
+    </>
   );
 };
 

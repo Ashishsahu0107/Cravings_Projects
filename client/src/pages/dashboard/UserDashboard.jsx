@@ -7,7 +7,7 @@ const UserDashboard = () => {
     return (
         <>
             {/* create a sidebar and main content area */}
-            <div className='flex h-[90vh]'>
+            <div className='flex h-full'>
                 <div className='w-1/6 border border-base-300'>
                     <Sidebar />
                 </div>

@@ -18,7 +18,7 @@ import RiderDashboard from './pages/RiderDashboard'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
 import SiteMap from './pages/SiteMap'
-import {Toaster} from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import UserDashboard from './pages/dashboard/UserDashboard'
 import OverView from './components/userDashboard/OverView'
 import Order from './components/userDashboard/Order'
@@ -28,7 +28,7 @@ import Setting from './components/userDashboard/Setting'
 const App = () => {
   return (
     <BrowserRouter>
-      <Toaster/>
+      <Toaster />
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
