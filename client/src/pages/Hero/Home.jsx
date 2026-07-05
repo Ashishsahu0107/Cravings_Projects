@@ -1,10 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch, FaStar } from "react-icons/fa";
 import api from "../../config/api.config.js";
+import Carousel from "../../components/ui/Carousel.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 import { restaurants, stats, testimonials } from "../../data/siteData";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { isLogin } = useAuth();
+  const heroImages = [
+    "/assets/bgImage4-L1QELaMd.jpg",
+    "/assets/bgImage1-BgVBBcls.jpg",
+    "/assets/bgImage2-CSvQeVNX.jpg",
+    "/assets/bgImage3-BTY6Sz_K.jpg",
+  ];
 
   const handleExploreMenu = async (restaurant) => {
     try {
@@ -20,10 +29,10 @@ const Home = () => {
     <main className="min-h-screen bg-base-100">
       <section className="relative overflow-hidden py-16 text-primary-content md:py-40">
         <div className="absolute inset-0 z-0">
-          <img
-            src="/assets/bgImage4-L1QELaMd.jpg"
-            alt="Food table"
-            className="h-full w-full object-cover"
+          <Carousel
+            images={heroImages}
+            interval={4500}
+            className="absolute inset-0 h-full w-full"
           />
         </div>
         <div className="absolute inset-0 z-10 bg-black/40"></div>
@@ -70,63 +79,83 @@ const Home = () => {
               Featured Restaurants
             </h2>
             <p className="text-primary-content/70">
-              {restaurants.length} restaurants available
+              {isLogin ? `${restaurants.length} restaurants available` : "Login to view available restaurants"}
             </p>
-            <div className="mt-4 flex justify-end">
+            {isLogin && (
+              <div className="mt-4 flex justify-end">
+                <Link
+                  to="/restaurant-dashboard"
+                  className="rounded-lg bg-base-100 px-4 py-2 text-sm font-semibold text-base-content transition hover:bg-base-200"
+                >
+                  Add Menu
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {!isLogin ? (
+            <div className="rounded-xl bg-base-100 p-8 text-center shadow-md">
+              <h3 className="mb-2 text-xl font-semibold text-base-content">
+                Please log in to explore restaurants
+              </h3>
+              <p className="mb-4 text-base-content/70">
+                Sign in to see all featured restaurants and place your order.
+              </p>
               <Link
-                to="/restaurant-dashboard"
-                className="rounded-lg bg-base-100 px-4 py-2 text-sm font-semibold text-base-content transition hover:bg-base-200"
+                to="/login"
+                className="rounded-lg bg-primary px-5 py-2 font-semibold text-primary-content transition hover:opacity-90"
               >
-                Add Menu
+                Login Now
               </Link>
             </div>
-          </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {restaurants.map((restaurant) => (
-              <article
-                key={restaurant.id}
-                className="flex flex-col overflow-hidden rounded-xl bg-base-100 shadow-md transition hover:scale-[1.02] hover:shadow-xl"
-              >
-                <div className="relative h-48 overflow-hidden bg-base-200">
-                  <img
-                    src={restaurant.image}
-                    alt={restaurant.name}
-                    className="h-full w-full object-cover"
-                  />
-                  <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-sm font-semibold text-primary-content">
-                    <FaStar />
-                    {restaurant.rating}
+          ) : (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {restaurants.map((restaurant) => (
+                <article
+                  key={restaurant.id}
+                  className="flex flex-col overflow-hidden rounded-xl bg-base-100 shadow-md transition hover:scale-[1.02] hover:shadow-xl"
+                >
+                  <div className="relative h-48 overflow-hidden bg-base-200">
+                    <img
+                      src={restaurant.image}
+                      alt={restaurant.name}
+                      className="h-full w-full object-cover"
+                    />
+                    <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-sm font-semibold text-primary-content">
+                      <FaStar />
+                      {restaurant.rating}
+                    </div>
                   </div>
-                </div>
-                <div className="flex flex-1 flex-col p-4">
-                  <h3 className="mb-1 text-lg font-bold text-base-content">
-                    {restaurant.name}
-                  </h3>
-                  <p className="mb-3 text-sm text-base-content">
-                    {restaurant.description}
-                  </p>
-                  <div className="mb-3 flex flex-wrap gap-2">
-                    {restaurant.cuisines.map((cuisine) => (
-                      <span
-                        key={cuisine}
-                        className="rounded bg-primary px-2 py-1 text-xs capitalize text-primary-content"
+                  <div className="flex flex-1 flex-col p-4">
+                    <h3 className="mb-1 text-lg font-bold text-base-content">
+                      {restaurant.name}
+                    </h3>
+                    <p className="mb-3 text-sm text-base-content">
+                      {restaurant.description}
+                    </p>
+                    <div className="mb-3 flex flex-wrap gap-2">
+                      {restaurant.cuisines.map((cuisine) => (
+                        <span
+                          key={cuisine}
+                          className="rounded bg-primary px-2 py-1 text-xs capitalize text-primary-content"
+                        >
+                          {cuisine}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="mt-auto border-t border-base-200 pt-3">
+                      <button
+                        onClick={() => handleExploreMenu(restaurant)}
+                        className="block w-full rounded-lg bg-primary px-4 py-2 text-center font-semibold text-primary-content transition hover:opacity-90"
                       >
-                        {cuisine}
-                      </span>
-                    ))}
+                        Explore Menu
+                      </button>
+                    </div>
                   </div>
-                  <div className="mt-auto border-t border-base-200 pt-3">
-                    <button
-                      onClick={() => handleExploreMenu(restaurant)}
-                      className="block w-full rounded-lg bg-primary px-4 py-2 text-center font-semibold text-primary-content transition hover:opacity-90"
-                    >
-                      Explore Menu
-                    </button>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

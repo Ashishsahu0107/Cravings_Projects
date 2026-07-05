@@ -82,7 +82,7 @@ const Header = () => {
                 <img
                   src={Logo}
                   alt={user.fullName}
-                  className="w-15 h-15 rounded-full object-cover "
+                  className="w-10 h-10 rounded-full object-cover "
                 />
                 <div>
                   <button
