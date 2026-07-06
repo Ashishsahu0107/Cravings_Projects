@@ -7,6 +7,8 @@ import { MdOutlineAddAPhoto } from "react-icons/md";
 const Setting = () => {
     const { user, setUser } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
+    const [selectedPhotoFile, setSelectedPhotoFile] = useState(null);
+
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -35,31 +37,20 @@ const Setting = () => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = () => {
-            setFormData((prev) => ({ ...prev, photo: reader.result }));
-        };
-        reader.readAsDataURL(file);
+        const previewUrl = URL.createObjectURL(file);
+        setSelectedPhotoFile(file);
+        setFormData((prev) => ({ ...prev, photo: previewUrl }));
     };
 
-    const handlePhotoUpload = async () => {
-        if (!user?._id || !formData.photo || formData.photo === user.photo) return;
-
-        setIsLoading(true);
-        try {
-            const res = await api.put('/auth/profile', {
-                userId: user._id,
-                photo: formData.photo,
-            });
-
-            toast.success(res.data.message);
-            sessionStorage.setItem('UserData', JSON.stringify(res.data.data));
-            setUser(res.data.data);
-        } catch (error) {
-            toast.error(error?.response?.data?.message || 'Unable to update your profile photo.');
-        } finally {
-            setIsLoading(false);
-        }
+    const handleEditClick = () => {
+        setIsEditing(true);
+        setFormData((prev) => ({
+            ...prev,
+            fullName: user?.fullName || '',
+            email: user?.email || '',
+            phone: user?.phone || '',
+            photo: user?.photo || prev.photo || '',
+        }));
     };
 
     const handleSubmit = async (e) => {
@@ -70,17 +61,24 @@ const Setting = () => {
         setIsLoading(true);
 
         try {
-            const res = await api.put('/auth/profile', {
-                userId: user._id,
-                fullName: formData.fullName.trim(),
-                email: formData.email.trim(),
-                phone: formData.phone.trim(),
-                photo: formData.photo,
+            const payload = new FormData();
+            payload.append('userId', user._id);
+            payload.append('fullName', formData.fullName.trim());
+            payload.append('email', formData.email.trim());
+            payload.append('phone', formData.phone.trim());
+
+            if (selectedPhotoFile) {
+                payload.append('photo', selectedPhotoFile);
+            }
+
+            const res = await api.put('/auth/profile', payload, {
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
 
             toast.success(res.data.message);
             sessionStorage.setItem('UserData', JSON.stringify(res.data.data));
             setUser(res.data.data);
+            setSelectedPhotoFile(null);
             setIsEditing(false);
         } catch (error) {
             toast.error(error?.response?.data?.message || 'Unable to update your profile.');
@@ -102,23 +100,25 @@ const Setting = () => {
                         alt={user.fullName || 'User'}
                         className="h-full w-full object-cover bg-warning"
                     />
-                    <div className='absolute bottom-0 right-0 rounded-full bg-black/50 p-2 text-white shadow-sm'>
-                        <label htmlFor="profilePic" className="cursor-pointer text-xl">
-                            <MdOutlineAddAPhoto />
-                        </label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            name="profilePic"
-                            id="profilePic"
-                            className="hidden"
-                            onChange={handlePhotoChange}
-                        />
-                    </div>
+                    {isEditing && (
+                        <div className='absolute bottom-0 right-0 rounded-full bg-black/50 p-2 text-white shadow-sm'>
+                            <label htmlFor="profilePic" className="flex cursor-pointer items-center justify-center text-xl">
+                                <MdOutlineAddAPhoto />
+                            </label>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                name="profilePic"
+                                id="profilePic"
+                                className="hidden"
+                                onChange={handlePhotoChange}
+                            />
+                        </div>
+                    )}
                 </div>
                 <div>
                     <h2 className="text-xl font-semibold">Profile Settings</h2>
-                    <p className="text-sm text-gray-500">Update your name and phone number.</p>
+                    <p className="text-sm text-gray-500">Update your photo, name, and phone number.</p>
                 </div>
             </div>
 
@@ -150,8 +150,9 @@ const Setting = () => {
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            className="w-full rounded-md border px-3 py-2"
+                            className="w-full rounded-md border disabled:text-primary-content px-3 py-2 disabled:bg-primary cursor-not-allowed"
                             required
+                            disabled={true}
                         />
                     </div>
                     <div className="flex gap-3">
@@ -166,10 +167,12 @@ const Setting = () => {
                             type="button"
                             onClick={() => {
                                 setIsEditing(false);
+                                setSelectedPhotoFile(null);
                                 setFormData({
                                     fullName: user.fullName || '',
                                     phone: user.phone || '',
                                     email: user.email || '',
+                                    photo: user.photo || '',
                                 });
                             }}
                             className="rounded-md border px-4 py-2"
@@ -185,21 +188,11 @@ const Setting = () => {
                     <div><span className="font-medium">Email:</span> {user.email}</div>
                     <div className="flex flex-wrap items-center gap-3">
                         <button
-                            onClick={() => setIsEditing(true)}
+                            onClick={handleEditClick}
                             className="rounded-md bg-amber-500 px-4 py-2 text-white"
                         >
                             Edit
                         </button>
-                        {formData.photo && formData.photo !== user.photo && (
-                            <button
-                                type="button"
-                                onClick={handlePhotoUpload}
-                                disabled={isLoading}
-                                className="rounded-md bg-primary px-4 py-2 text-white disabled:opacity-60"
-                            >
-                                {isLoading ? 'Uploading...' : 'Upload Photo'}
-                            </button>
-                        )}
                     </div>
                 </div>
             )}

@@ -10,6 +10,7 @@ import RestaurantRouter from './src/routers/restaurant.route.js';
 import connectDB from './src/config/dbConnection.config.js';
 import morgan from 'morgan';
 import cors from 'cors';
+import multer from 'multer';
 
 const app = express();
 

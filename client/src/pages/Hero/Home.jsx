@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { FaSearch, FaStar } from "react-icons/fa";
 import api from "../../config/api.config.js";
 import Carousel from "../../components/ui/Carousel.jsx";
@@ -7,6 +8,9 @@ import { restaurants, stats, testimonials } from "../../data/siteData";
 
 const Home = () => {
   const navigate = useNavigate();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const { isLogin } = useAuth();
   const heroImages = [
     "/assets/bgImage4-L1QELaMd.jpg",
@@ -14,6 +18,14 @@ const Home = () => {
     "/assets/bgImage2-CSvQeVNX.jpg",
     "/assets/bgImage3-BTY6Sz_K.jpg",
   ];
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const handleExploreMenu = async (restaurant) => {
     try {
@@ -47,12 +59,14 @@ const Home = () => {
               Order from thousands of restaurants and get it delivered to your doorstep
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link
+              {!isLoggedIn && (
+                <Link
                 to="/register"
                 className="rounded-lg bg-primary px-8 py-3 font-semibold text-primary-content transition hover:opacity-90"
               >
                 Sign Up
               </Link>
+              )}
               <Link
                 to="/order-now"
                 className="rounded-lg bg-base-100 px-8 py-3 font-semibold text-base-content transition hover:bg-base-200"
@@ -176,9 +190,8 @@ const Home = () => {
                 className="rounded-lg bg-base-100 p-8 text-center shadow-md transition hover:shadow-lg"
               >
                 <div
-                  className={`mb-2 text-4xl font-bold md:text-5xl ${
-                    index % 2 ? "text-(--color-accent)" : "text-primary"
-                  }`}
+                  className={`mb-2 text-4xl font-bold md:text-5xl ${index % 2 ? "text-(--color-accent)" : "text-primary"
+                    }`}
                 >
                   {value}
                 </div>
