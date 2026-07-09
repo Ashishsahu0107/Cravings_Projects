@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext.jsx'
 import { FiClock, FiHeart, FiShoppingCart, FiUser, FiArrowRight, FiMapPin, FiStar } from 'react-icons/fi'
-import { restaurants } from '../../data/siteData'
+import { restaurants } from '../../data/siteData.js'
 
 const stats = [
   { label: 'Orders', value: '24', icon: <FiShoppingCart size={18} />, color: 'bg-orange-50 text-orange-600' },
@@ -11,7 +11,7 @@ const stats = [
   { label: 'Profile', value: '82%', icon: <FiUser size={18} />, color: 'bg-emerald-50 text-emerald-600' },
 ]
 
-const OverView = () => {
+const UserOverView = () => {
   const { user } = useAuth()
 
   return (
@@ -100,4 +100,4 @@ const OverView = () => {
   )
 }
 
-export default OverView
+export default UserOverView
