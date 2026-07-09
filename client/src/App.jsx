@@ -20,10 +20,13 @@ import TermsOfService from './pages/TermsOfService'
 import SiteMap from './pages/SiteMap'
 import { Toaster } from 'react-hot-toast';
 import UserDashboard from './pages/dashboard/UserDashboard'
-import OverView from './components/userDashboard/OverView'
-import Order from './components/userDashboard/Order'
-import Wishlist from './components/userDashboard/Wishlist'
-import Setting from './components/userDashboard/Setting'
+import UserOverView from './components/userDashboard/UserOverView'
+import UserOrder from './components/userDashboard/UserOrder'
+import UserWishlist from './components/userDashboard/UserWishlist'
+import UserSetting from './components/userDashboard/UserSetting'
+import AdminDashboard from './pages/dashboard/AdminDashboard'
+
+
 
 const App = () => {
   return (
@@ -56,11 +59,14 @@ const App = () => {
         {/* Dashboard routes  */}
         <Route path='/user/dashboard' element={<UserDashboard />}>
           <Route index element={<Navigate to="overview" replace />} />
-          <Route path='overview' element={<OverView />} />
-          <Route path='order' element={<Order />} />
-          <Route path='wishlist' element={<Wishlist />} />
-          <Route path='setting' element={<Setting />} />
+          <Route path='overview' element={<UserOverView />} />
+          <Route path='order' element={<UserOrder />} />
+          <Route path='wishlist' element={<UserWishlist />} />
+          <Route path='setting' element={<UserSetting />} />
         </Route>
+
+        <Route path='/rider-dashboard' element={<RiderDashboard />} />
+        <Route path='/admin-dashboard' element={<AdminDashboard />} />
 
       </Routes>
       <Footer />

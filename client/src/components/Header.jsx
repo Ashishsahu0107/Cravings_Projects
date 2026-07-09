@@ -44,7 +44,7 @@ const Header = () => {
   return (
     <>
       <nav className="flex sticky top-0 z-99 justify-between px-6 md:px-12 h-16 items-center bg-primary gap-4">
-        <Link to={"user/dashboard/overview"}>
+        <Link to={"/"}>
           <img src={LogoHeader} alt="header-images" className="h-14 " />
         </Link>
         <div className="flex items-center gap-3">
