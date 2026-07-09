@@ -7,6 +7,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const [registerData, setRegisterData] = useState({
+    userType: "",
     fullName: "",
     email: "",
     phone: "",
@@ -34,6 +35,7 @@ const Register = () => {
     setError("");
 
     const payload = {
+      
       fullName: registerData.fullName.trim(),
       email: registerData.email.toLowerCase().trim(),
       phone: registerData.phone.trim(),
@@ -49,6 +51,7 @@ const Register = () => {
       toast.success('Register Successfully  !');
 
       setRegisterData({
+        userType: "",
         fullName: "",
         email: "",
         phone: "",
