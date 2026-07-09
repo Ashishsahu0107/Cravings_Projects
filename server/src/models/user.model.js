@@ -29,10 +29,15 @@ const UserSchema = mongoose.Schema(
                 type:String,
             }
         },
+        userType: {
+            type: String,
+            enum:["admin","customer","rider","restaurant"],
+            required: true,
+            default:"customer",
+        },
         password: {
             type: String,
             required: true,
-            select: false,
         },
         dob: {
             type: String,
