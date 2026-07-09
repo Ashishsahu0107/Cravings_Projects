@@ -4,7 +4,7 @@ import api from '../../config/api.config.js';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { MdOutlineAddAPhoto } from "react-icons/md";
 
-const Setting = () => {
+const RiderSetting = () => {
     const { user, setUser } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [selectedPhotoFile, setSelectedPhotoFile] = useState(null);
@@ -200,4 +200,4 @@ const Setting = () => {
     );
 };
 
-export default Setting;
+export default RiderSetting;
