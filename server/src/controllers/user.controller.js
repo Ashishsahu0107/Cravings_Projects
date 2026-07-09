@@ -2,18 +2,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import User from "../models/user.model.js";
-import { v2 as cloudinary } from "cloudinary";
-
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import cloudinary from "../config/cloudinary-config.js";
 
 const uploadToCloudinary = async (fileBuffer) => {
     return new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
-            { folder: "cravings/profile",width:500,height:500 },
+            { folder: "cravings/profile", width: 500, height: 500 },
             (error, result) => {
                 if (error) {
                     return reject(error);
@@ -24,6 +18,38 @@ const uploadToCloudinary = async (fileBuffer) => {
 
         stream.end(fileBuffer);
     });
+};
+
+const deleteFromCloudinary = async (publicId) => {
+    if (!publicId) return true;
+
+    return new Promise((resolve) => {
+        cloudinary.uploader.destroy(publicId, { invalidate: true }, (error, result) => {
+            if (error) {
+                console.error("Cloudinary delete error:", error.message);
+                resolve(false);
+                return;
+            }
+            resolve(result?.result === "ok");
+        });
+    });
+};
+
+const getCloudinaryPublicId = (photo) => {
+    if (!photo) return null;
+
+    if (typeof photo === "string") {
+        if (!photo.includes("res.cloudinary.com")) return null;
+
+        const match = photo.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-zA-Z0-9]+)?$/);
+        return match?.[1] || null;
+    }
+
+    if (typeof photo === "object") {
+        return photo.publicId || null;
+    }
+
+    return null;
 };
 
 export const UpdateUserProfile = async (req, res, next) => {
@@ -44,8 +70,25 @@ export const UpdateUserProfile = async (req, res, next) => {
         if (email !== undefined) updates.email = email.trim();
 
         if (req.file) {
+            const existingUser = await User.findById(userId).select("photo");
+
+            if (!existingUser) {
+                const error = new Error("User not found");
+                error.statusCode = 404;
+                return next(error);
+            }
+
             const uploadedImage = await uploadToCloudinary(req.file.buffer);
-            updates.photo = uploadedImage.secure_url;
+            const previousPublicId = getCloudinaryPublicId(existingUser.photo);
+
+            updates.photo = {
+                url: uploadedImage.secure_url,
+                publicId: uploadedImage.public_id,
+            };
+
+            if (previousPublicId && previousPublicId !== uploadedImage.public_id) {
+                await deleteFromCloudinary(previousPublicId);
+            }
         }
 
         if (Object.keys(updates).length === 0) {
@@ -64,9 +107,14 @@ export const UpdateUserProfile = async (req, res, next) => {
             return next(error);
         }
 
-        res
-            .status(200)
-            .json({ message: "Profile updated successfully", data: updatedUser });
+        const updatedUserResponse = updatedUser.toObject();
+        updatedUserResponse.photo = updatedUserResponse.photo?.url || updatedUserResponse.photo || null;
+        delete updatedUserResponse.password;
+
+        res.status(200).json({
+            message: "Profile updated successfully",
+            data: updatedUserResponse,
+        });
     } catch (error) {
         console.log(error.message);
         next(error);
