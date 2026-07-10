@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import api from "../../config/api.config.js";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { MdOutlineAddAPhoto,MdOutlineLockReset  } from "react-icons/md";
+import { MdOutlineAddAPhoto, MdOutlineLockReset } from "react-icons/md";
 import PasswordChangeModal from "../commonModal/ChangePasswordModal.jsx";
 
 const UserSetting = () => {
@@ -103,7 +103,6 @@ const UserSetting = () => {
 
   return (
     <>
-      {" "}
       <div className="max-w-2xl rounded-xl border border-base-200 bg-primary-content p-6 shadow-md">
         <div className="mb-6 flex items-center gap-4">
           <div className="relative h-16 w-16 overflow-hidden rounded-full">
@@ -226,12 +225,12 @@ const UserSetting = () => {
               >
                 Edit
               </button>
-               <button
-                  onClick={() => setIsPasswordChangeModalOpen(true)}
-                  className="rounded-md bg-amber-500 px-4 py-2 text-white"
-                >
-                  <MdOutlineLockReset /> Change Password
-                </button>
+              <button
+                onClick={() => setIsPasswordChangeModalOpen(true)}
+                className="rounded-md bg-amber-500 px-4 py-2 text-white"
+              >
+                <MdOutlineLockReset /> Change Password
+              </button>
             </div>
           </div>
         )}
