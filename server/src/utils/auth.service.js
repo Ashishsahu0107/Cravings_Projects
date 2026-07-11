@@ -20,3 +20,5 @@ export const generateToken = async (user, res) => {
     throw error;
   }
 };
+
+

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import api from "../../config/api.config.js";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { MdOutlineAddAPhoto, MdOutlineLockReset } from "react-icons/md";
+import { MdOutlineAddAPhoto, MdOutlineLockReset,MdEdit } from "react-icons/md";
 import PasswordChangeModal from "../commonModal/ChangePasswordModal.jsx";
 
 const UserSetting = () => {
@@ -221,13 +221,13 @@ const UserSetting = () => {
             <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={handleEditClick}
-                className="rounded-md bg-amber-500 px-4 py-2 text-white"
+                className="rounded-md bg-amber-500 px-4 py-2 text-white flex items-center gap-2 "
               >
-                Edit
+                <MdEdit/> Edit
               </button>
               <button
                 onClick={() => setIsPasswordChangeModalOpen(true)}
-                className="rounded-md bg-amber-500 px-4 py-2 text-white"
+                className="rounded-md bg-amber-500 px-4 py-2 text-white flex items-center gap-2"
               >
                 <MdOutlineLockReset /> Change Password
               </button>

@@ -36,7 +36,7 @@ const PasswordChangeModal = ({ open, onClose }) => {
         setIsLoading(false);
         return;
       }
-      const res = await api.patch("/common/change-password", formData);
+      const res = await api.patch("/auth/change-password", formData);
       toast.success("Password changed successfully!");
       handleCloseModal();
     } catch (error) {
@@ -100,7 +100,7 @@ const PasswordChangeModal = ({ open, onClose }) => {
                   Confirm New Password
                 </label>
                 <input
-                  type="text"
+                  type="password"
                   id="confirmNewPassword"
                   name="confirmNewPassword"
                   value={formData.confirmNewPassword}

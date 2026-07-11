@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import bcrypt from "bcrypt";
 import User from "../models/user.model.js";
 import cloudinary from "../config/cloudinary-config.js";
 
@@ -115,6 +116,54 @@ export const UpdateUserProfile = async (req, res, next) => {
             message: "Profile updated successfully",
             data: updatedUserResponse,
         });
+    } catch (error) {
+        console.log(error.message);
+        next(error);
+    }
+};
+
+export const ChangePassword = async (req, res, next) => {
+    try {
+        const userId = req.user?._id;
+        const { oldPassword, newPassword, confirmNewPassword } = req.body;
+
+        if (!userId) {
+            const error = new Error("Authentication required");
+            error.statusCode = 401;
+            return next(error);
+        }
+
+        if (!oldPassword || !newPassword || !confirmNewPassword) {
+            const error = new Error("All password fields are required");
+            error.statusCode = 400;
+            return next(error);
+        }
+
+        if (newPassword !== confirmNewPassword) {
+            const error = new Error("New password and confirm password do not match");
+            error.statusCode = 400;
+            return next(error);
+        }
+
+        const existingUser = await User.findById(userId).select("+password");
+        if (!existingUser) {
+            const error = new Error("User not found");
+            error.statusCode = 404;
+            return next(error);
+        }
+
+        const isMatch = await bcrypt.compare(oldPassword, existingUser.password);
+        if (!isMatch) {
+            const error = new Error("Current password is incorrect");
+            error.statusCode = 401;
+            return next(error);
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        existingUser.password = await bcrypt.hash(newPassword, salt);
+        await existingUser.save();
+
+        res.status(200).json({ message: "Password changed successfully" });
     } catch (error) {
         console.log(error.message);
         next(error);

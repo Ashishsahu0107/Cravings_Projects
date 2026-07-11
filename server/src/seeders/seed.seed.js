@@ -14,7 +14,8 @@ const Seed = async () => {
     console.log("Seeding completed successfully");
   } catch (error) {
     console.error(error.message);
-    process.exitCode = 1;
+  } finally {
+    process.exit(0);
   }
 };
 
