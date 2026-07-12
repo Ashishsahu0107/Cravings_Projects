@@ -8,6 +8,8 @@ import PublicRouter from './src/routers/public.route.js';
 import OrderRouter from './src/routers/order.route.js';
 import RestaurantRouter from './src/routers/restaurant.route.js';
 import connectDB from './src/config/dbConnection.config.js';
+import dashboardRoutes from "./src/routers/dashboard.route.js";
+import adminRoutes from "./src/routers/admin.route.js";
 import morgan from 'morgan';
 import cors from 'cors';
 import multer from 'multer';
@@ -24,6 +26,9 @@ app.use("/auth", AuthRouter);
 app.use("/public", PublicRouter);
 app.use("/orders", OrderRouter);
 app.use("/restaurants", RestaurantRouter);
+app.use("/dashboard", dashboardRoutes);
+app.use("/admin", adminRoutes);
+
 
 // Default API
 app.get("/", (req, res) => {

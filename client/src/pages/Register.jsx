@@ -97,7 +97,7 @@ const Register = () => {
     try {
       const res = await api.post("/auth/register", payload);
 
-      toast.success('Registration Successful!');
+      toast.success('Registration Successful!', res);
 
       setRegisterData({
         userType: "",

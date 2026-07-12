@@ -42,12 +42,20 @@ const Login = () => {
 
     try {
       const res = await api.post("/auth/login", payload);
+      const userData = res.data?.data;
+      const dashboardRoute =
+        {
+          customer: "/user/dashboard",
+          restaurant: "/restaurant-dashboard",
+          rider: "/rider-dashboard",
+          admin: "/admin-dashboard",
+        }[userData?.userType] || "/user/dashboard";
 
       toast.success(res.data.message);
-      sessionStorage.setItem("UserData", JSON.stringify(res.data.data));
-      setUser(res.data.data);
+      sessionStorage.setItem("UserData", JSON.stringify(userData));
+      setUser(userData);
       setIsLogin(true);
-      navigate("/user/dashboard");
+      navigate(dashboardRoute);
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
     }
@@ -132,11 +140,12 @@ const Login = () => {
                 className="border border-primary focus:outline-none focus:border-primary p-1 rounded"
               />
             </div>
-            <div className="text-right">
-              <div>
-                <input type="radio" id="remeberme" name="rememberme2" /> <label htmlFor="remeberme">remember</label>
+            <div className="flex  justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <input type="radio" id="remeberme" name="rememberme2" />
+                <label htmlFor="remeberme">remember</label>
               </div>
-              <button
+              <div
                 type="button"
                 onClick={() => {
                   setForgotPasswordOpen(true);
@@ -145,7 +154,7 @@ const Login = () => {
                 className="text-sm text-primary hover:underline"
               >
                 Forgot password?
-              </button>
+              </div>
             </div>
             <button
               type="submit"
@@ -153,7 +162,7 @@ const Login = () => {
             >
               Login
             </button>
-            
+
             <div className="flex items-center justify-center gap-2 mb-2">
               <div className="w-17 border" />
               <p className="">Don't have an account?</p>

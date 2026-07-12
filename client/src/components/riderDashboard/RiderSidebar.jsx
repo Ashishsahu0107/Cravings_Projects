@@ -16,14 +16,14 @@ const RiderSidebar = () => {
     const currentPath = location.pathname.split('/').pop();
 
     const handleNavigation = (path) => {
-        navigate(`/user/dashboard/${path}`);
+        navigate(`/rider-dashboard/${path}`);
     }
 
     return (
         <>
             <div className='max-w-62.5 fixed w-full border-base-200 border bg-base-200 h-[91vh] shadow-md'>
                 <div className='border-b-2 text-center text-primary font-bold border-primary text-2xl p-3 '>
-                    User Dashboard
+                    Rider Dashboard
                 </div>
                 <div className='p-2 flex flex-col gap-3 items-center '>
                     {MenuItems.map((item, idx) => (

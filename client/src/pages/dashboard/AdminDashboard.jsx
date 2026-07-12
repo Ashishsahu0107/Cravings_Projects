@@ -1,15 +1,13 @@
 import React from 'react'
-import { useAuth } from '../../context/AuthContext.jsx'
-import { Outlet, Navigate } from 'react-router-dom';
-
+import { Outlet } from 'react-router-dom';
+import AdminSidebar from '../../components/adminDashboard/AdminSidebar.jsx';
 
 const AdminDashboard = () => {
     return (
         <>
-            {/* create a sidebar and main content area */}
-            <div className='flex h-full'>
+            <div className='flex min-h-[90vh]'>
                 <div className='w-1/6 border border-base-300'>
-                    <Sidebar/>
+                    <AdminSidebar />
                 </div>
                 <div className='w-5/6 h-full border border-base-300 p-4'>
                     <Outlet />

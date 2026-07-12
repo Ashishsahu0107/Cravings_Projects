@@ -1,103 +1,157 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext.jsx'
-import { FiClock, FiHeart, FiShoppingCart, FiUser, FiArrowRight, FiMapPin, FiStar } from 'react-icons/fi'
-import { restaurants } from '../../data/siteData.js'
-
-const stats = [
-  { label: 'Orders', value: '24', icon: <FiShoppingCart size={18} />, color: 'bg-orange-50 text-orange-600' },
-  { label: 'Favorites', value: '08', icon: <FiHeart size={18} />, color: 'bg-rose-50 text-rose-600' },
-  { label: 'Pending', value: '03', icon: <FiClock size={18} />, color: 'bg-amber-50 text-amber-600' },
-  { label: 'Profile', value: '82%', icon: <FiUser size={18} />, color: 'bg-emerald-50 text-emerald-600' },
-]
+import { useEffect, useState } from "react";
+import api from "../../config/api.config.js";
+import toast from "react-hot-toast";
 
 const RestaurantOverView = () => {
-  const { user } = useAuth()
+  const [dashboard, setDashboard] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("");
+
+  const getDashboard = async () => {
+    try {
+      const res = await api.get("/dashboard/overview");
+      setDashboard(res.data?.data || null);
+      setMessage(res.data?.message || "");
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || "Unable to load dashboard.";
+      setMessage(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getDashboard();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center text-xl">
+        Loading...
+      </div>
+    );
+  }
+
+  if (!dashboard) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-base-100 p-8">
+        <div className="rounded-xl bg-primary-content p-8 text-center shadow">
+          <h2 className="text-2xl font-semibold text-base-content">No restaurant dashboard found</h2>
+          <p className="mt-2 text-gray-600">{message || "Please complete your restaurant profile to view the overview."}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className='h-full overflow-auto bg-base-100 p-4 sm:p-6 lg:p-8'>
-      <div className='rounded-sm bg-gradient-to-r from-primary to-warning p-6 text-primary-content shadow-lg'>
-        <div className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
-          <div>
-            <p className='text-sm uppercase tracking-[0.3em] opacity-80'>Cravings dashboard</p>
-            <h2 className='mt-2 text-2xl font-bold sm:text-3xl'>Welcome back, {user?.fullName || 'Foodie'}!</h2>
-            <p className='mt-2 max-w-2xl text-sm sm:text-base opacity-90'>Track your orders, save your favorite restaurants, and discover fresh meals that match your cravings.</p>
-          </div>
-          <Link to='/order-now' className='inline-flex items-center justify-center gap-2 rounded-sm bg-base-100 px-4 py-2 text-sm font-semibold text-primary transition hover:opacity-90'>
-            Order Again <FiArrowRight />
-          </Link>
+    <div className="min-h-screen bg-base-200 p-8">
+      {/* Heading */}
+      <div className="mb-8">
+        <h1 className="text-3xl text-primary font-bold">{dashboard.restaurantName}</h1>
+
+        <p className="text-content">Restaurant Dashboard</p>
+      </div>
+
+      {/* Cards */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <Card title="Restaurant Status" value={dashboard.status || "Inactive"} />
+
+        <Card
+          title="Open Status"
+          value={dashboard.isOpen ? "Open" : "Closed"}
+        />
+
+        <Card title="Average Rating" value={dashboard.averageRating ?? 0} />
+
+        <Card title="Restaurant Type" value={dashboard.restaurantType || "Not set"} />
+
+        <Card title="Total Cuisines" value={dashboard.totalCuisines ?? 0} />
+
+        <Card title="City" value={dashboard.location?.city || "Not set"} />
+
+        <Card title="Country" value={dashboard.location?.country || "Not set"} />
+
+        <Card
+          title="Created"
+          value={dashboard.createdAt ? new Date(dashboard.createdAt).toLocaleDateString() : "Not available"}
+        />
+      </div>
+
+      {/* Restaurant Details */}
+      <div className="mt-10 grid gap-6 lg:grid-cols-2">
+        <div className="rounded-xl bg-white p-6 shadow">
+          <h2 className="mb-4 text-xl font-semibold">Contact Details</h2>
+
+          <p>Email : {dashboard.contact?.email || "Not available"}</p>
+
+          <p>Phone : {dashboard.contact?.phone || "Not available"}</p>
+
+          <p>Address : {dashboard.location?.address || "Not available"}</p>
+        </div>
+
+        <div className="rounded-xl bg-white p-6 shadow">
+          <h2 className="mb-4 text-xl font-semibold">Serving Hours</h2>
+
+          <p>Opening : {dashboard.servingHours?.openingTime || "Not available"}</p>
+
+          <p>Closing : {dashboard.servingHours?.closingTime || "Not available"}</p>
         </div>
       </div>
 
-      <div className='mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
-        {stats.map((item, index) => (
-          <div key={index} className='rounded-sm border border-base-200 bg-base-100 p-4 shadow-sm flex justify-between'>
-            
-            <div>
-              <p className='text-sm text-secondary'>{item.label}</p>
-            <p className='text-2xl font-bold text-base-content'>{item.value}</p>
-            </div>
-            <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-sm ${item.color}`}>
-              {item.icon}
-            </div>
-          </div>
-        ))}
+      {/* Cuisine */}
+
+      <div className="mt-10 rounded-xl bg-white p-6 shadow">
+        <h2 className="mb-4 text-xl font-semibold">Cuisine Types</h2>
+
+        <div className="flex flex-wrap gap-3">
+          {(dashboard.cuisines || []).length > 0 ? (
+            dashboard.cuisines.map((item, index) => (
+              <span
+                key={index}
+                className="rounded-full bg-orange-100 px-4 py-2 text-orange-700"
+              >
+                {item}
+              </span>
+            ))
+          ) : (
+            <p className="text-gray-500">No cuisines added yet.</p>
+          )}
+        </div>
       </div>
 
-      <div className='mt-6 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]'>
-        <div className='rounded-sm border border-base-200 bg-base-100 p-6 shadow-sm'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <h3 className='text-xl font-semibold text-base-content'>Recommended for you</h3>
-              <p className='text-sm text-secondary'>Popular spots picked for your taste.</p>
-            </div>
-            <Link to='/order-now' className='text-sm font-semibold text-primary'>Explore all</Link>
-          </div>
+      {/* Images */}
 
-          <div className='mt-4 space-y-3'>
-            {restaurants.slice(0, 3).map((restaurant) => (
-              <div key={restaurant.id} className='flex items-center justify-between rounded-sm border border-base-200 bg-base-100 p-4'>
-                <div>
-                  <h4 className='font-semibold text-base-content'>{restaurant.name}</h4>
-                  <div className='mt-1 flex flex-wrap items-center gap-2 text-sm text-secondary'>
-                    <span className='inline-flex items-center gap-1'><FiStar className='text-amber-500' /> {restaurant.rating}</span>
-                    <span className='inline-flex items-center gap-1'><FiMapPin /> {restaurant.city}</span>
-                  </div>
-                </div>
-                <Link to='/order-now' className='rounded-sm bg-primary px-3 py-2 text-sm font-semibold text-primary-content'>View menu</Link>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="mt-10">
+        <h2 className="mb-4 text-xl font-semibold">Restaurant Images</h2>
 
-        <div className='space-y-6'>
-          <div className='rounded-sm border border-base-200 bg-base-100 p-6 shadow-sm'>
-            <h3 className='text-lg font-semibold text-base-content'>Today’s activity</h3>
-            <ul className='mt-4 space-y-3 text-sm text-secondary'>
-              <li className='rounded-sm bg-base-100 p-3'>Your last order from <span className='font-semibold text-base-content'>Under The Mango Tree</span> was delivered 20 mins ago.</li>
-              <li className='rounded-sm bg-base-100 p-3'>You saved <span className='font-semibold text-base-content'>3 restaurants</span> to your wishlist this week.</li>
-              <li className='rounded-sm bg-base-100 p-3'>New offer available for <span className='font-semibold text-base-content'>free delivery</span> on your next order.</li>
-            </ul>
-          </div>
-
-          <div className='rounded-sm border border-base-200 bg-primary p-6 text-primary-content shadow-sm'>
-            <h3 className='text-lg font-semibold'>Quick shortcuts</h3>
-            <div className='mt-4 space-y-3'>
-              <Link to='/order-now' className='flex items-center justify-between rounded-sm bg-base-100/15 px-4 py-3'>
-                <span>Order food</span><FiArrowRight />
-              </Link>
-              <Link to='/user/dashboard/wishlist' className='flex items-center justify-between rounded-sm bg-base-100/15 px-4 py-3'>
-                <span>View wishlist</span><FiHeart />
-              </Link>
-              <Link to='/user/dashboard/setting' className='flex items-center justify-between rounded-sm bg-base-100/15 px-4 py-3'>
-                <span>Update profile</span><FiUser />
-              </Link>
-            </div>
-          </div>
+        <div className="grid gap-5 md:grid-cols-3">
+          {(dashboard.images?.restaurantImages || []).length > 0 ? (
+            dashboard.images.restaurantImages.map((image) => (
+              <img
+                key={image.publicId}
+                src={image.url}
+                alt=""
+                className="h-60 w-full rounded-xl object-cover"
+              />
+            ))
+          ) : (
+            <p className="text-gray-500">No restaurant images uploaded yet.</p>
+          )}
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RestaurantOverView
+const Card = ({ title, value }) => {
+  return (
+    <div className="rounded-xl bg-primary/10 p-6 hover:-translate-y-1  hover:scale-102 shadow hover:shadow-lg duration-300 transition">
+      <h3 className="text-gray-500">{title}</h3>
+
+      <h1 className="mt-2 text-2xl font-bold">{value}</h1>
+    </div>
+  );
+};
+
+export default RestaurantOverView;

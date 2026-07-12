@@ -23,8 +23,10 @@ export const RegisterUser = async (req, res, next) => {
             return next(error);
         }
 
-        const photo= `https://placehold.co/600x400?text=${fullName.charAt(0).toUpperCase()}`;
-
+        const photo = {
+            url: `https://placehold.co/600x400?text=${encodeURIComponent(fullName.charAt(0).toUpperCase())}`,
+            publicId: "",
+        };
 
         const SALT = await bcrypt.genSalt(10);
 

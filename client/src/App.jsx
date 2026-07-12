@@ -12,9 +12,7 @@ import OrderNow from './pages/OrderNow'
 import Projects from './pages/Projects'
 import Skills from './pages/Skills'
 import PartnerWithUs from './pages/PartnerWithUs'
-import RestaurantDashboard from './pages/RestaurantDashboard'
 import BecomeARider from './pages/BecomeARider'
-import RiderDashboard from './pages/RiderDashboard'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
 import SiteMap from './pages/SiteMap'
@@ -24,7 +22,21 @@ import UserOverView from './components/userDashboard/UserOverView'
 import UserOrder from './components/userDashboard/UserOrder'
 import UserWishlist from './components/userDashboard/UserWishlist'
 import UserSetting from './components/userDashboard/UserSetting'
-import AdminDashboard from './pages/dashboard/AdminDashboard'
+import RestaurantDashboardPage from './pages/dashboard/RestaurantDashboard'
+import RestaurantOverView from './components/restaurantDashboard/RestaurantOverView'
+import RestaurantOrder from './components/restaurantDashboard/RestaurantOrder'
+import RestaurantWishlist from './components/restaurantDashboard/RestaurantWishlist'
+import RestaurantSetting from './components/restaurantDashboard/RestaurantSetting'
+import RiderDashboardPage from './pages/dashboard/RiderDashboard'
+import RiderOverView from './components/riderDashboard/RiderOverView'
+import RiderOrder from './components/riderDashboard/RiderOrder'
+import RiderWishlist from './components/riderDashboard/RiderWishlist'
+import RiderSetting from './components/riderDashboard/RiderSetting'
+import AdminDashboardPage from './pages/dashboard/AdminDashboard'
+import AdminOverView from './components/adminDashboard/AdminOverView'
+import AdminOrder from './components/adminDashboard/AdminOrder'
+import AdminWishlist from './components/adminDashboard/AdminWishlist'
+import AdminSetting from './components/adminDashboard/AdminSetting'
 
 
 
@@ -48,9 +60,7 @@ const App = () => {
         <Route path='/projects' element={<Projects />} />
         <Route path='/skills' element={<Skills />} />
         <Route path='/partner-with-us' element={<PartnerWithUs />} />
-        <Route path='/restaurant-dashboard' element={<RestaurantDashboard />} />
         <Route path='/become-a-rider' element={<BecomeARider />} />
-        <Route path='/rider-dashboard' element={<RiderDashboard />} />
         <Route path='/privacy-policy' element={<PrivacyPolicy />} />
         <Route path='/terms-of-service' element={<TermsOfService />} />
         <Route path='/site-map' element={<SiteMap />} />
@@ -65,8 +75,29 @@ const App = () => {
           <Route path='setting' element={<UserSetting />} />
         </Route>
 
-        <Route path='/rider-dashboard' element={<RiderDashboard />} />
-        <Route path='/admin-dashboard' element={<AdminDashboard />} />
+        <Route path='/restaurant-dashboard' element={<RestaurantDashboardPage />}>
+          <Route index element={<Navigate to="overview" replace />} />
+          <Route path='overview' element={<RestaurantOverView />} />
+          <Route path='order' element={<RestaurantOrder />} />
+          <Route path='wishlist' element={<RestaurantWishlist />} />
+          <Route path='setting' element={<RestaurantSetting />} />
+        </Route>
+
+        <Route path='/rider-dashboard' element={<RiderDashboardPage />}>
+          <Route index element={<Navigate to="overview" replace />} />
+          <Route path='overview' element={<RiderOverView />} />
+          <Route path='order' element={<RiderOrder />} />
+          <Route path='wishlist' element={<RiderWishlist />} />
+          <Route path='setting' element={<RiderSetting />} />
+        </Route>
+
+        <Route path='/admin-dashboard' element={<AdminDashboardPage />}>
+          <Route index element={<Navigate to="overview" replace />} />
+          <Route path='overview' element={<AdminOverView />} />
+          <Route path='order' element={<AdminOrder />} />
+          <Route path='wishlist' element={<AdminWishlist />} />
+          <Route path='setting' element={<AdminSetting />} />
+        </Route>
 
       </Routes>
       <Footer />
