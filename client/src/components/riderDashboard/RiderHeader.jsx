@@ -1,7 +1,9 @@
-import React from 'react';
-import { Search, Bell, Menu } from 'lucide-react';
+import React, { useState } from 'react';
+import { Search, Bell, Menu, AlertTriangle } from 'lucide-react';
+import EmergencyModal from './modules/EmergencyModal';
 
 const RiderHeader = ({ toggleSidebar, isOnline }) => {
+  const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between h-[70px] px-4 md:px-8 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 shadow-sm shrink-0">
       
@@ -25,7 +27,15 @@ const RiderHeader = ({ toggleSidebar, isOnline }) => {
       </div>
 
       {/* Right Actions */}
-      <div className="flex items-center gap-4 md:gap-6">
+      <div className="flex items-center gap-3 md:gap-6">
+        
+        {/* SOS Emergency Button */}
+        <button 
+          onClick={() => setIsEmergencyOpen(true)}
+          className="flex items-center gap-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-red-600 dark:text-red-500 px-3 py-1.5 md:px-4 md:py-2 rounded-xl transition font-black text-xs uppercase tracking-wider border border-red-100 dark:border-red-500/20 shadow-sm"
+        >
+          <AlertTriangle size={16} /> <span className="hidden sm:inline">SOS</span>
+        </button>
         
         {/* Current Earnings Badge */}
         <div className="hidden sm:flex items-center gap-2 bg-green-50 dark:bg-green-500/10 px-4 py-2 rounded-xl border border-green-100 dark:border-green-500/20">
@@ -53,6 +63,7 @@ const RiderHeader = ({ toggleSidebar, isOnline }) => {
         </button>
       </div>
 
+      <EmergencyModal isOpen={isEmergencyOpen} onClose={() => setIsEmergencyOpen(false)} />
     </header>
   );
 };

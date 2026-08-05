@@ -27,11 +27,9 @@ import RestaurantDashboardPage from './pages/dashboard/RestaurantDashboard'
 import RestaurantOverView from './components/restaurantDashboard/RestaurantOverView'
 import RestaurantWishlist from './components/restaurantDashboard/RestaurantWishlist'
 import RestaurantSetting from './components/restaurantDashboard/RestaurantSetting'
-import AdminDashboardPage from './pages/dashboard/AdminDashboard'
-import AdminOverView from './components/adminDashboard/AdminOverView'
-import AdminOrder from './components/adminDashboard/AdminOrder'
-import AdminWishlist from './components/adminDashboard/AdminWishlist'
-import AdminSetting from './components/adminDashboard/AdminSetting'
+import AdminLayout from './components/adminDashboard/AdminLayout'
+import AdminHome from './components/adminDashboard/modules/AdminHome'
+import OrderManager from './components/adminDashboard/modules/orders/OrderManager'
 
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './config/queryClient';
@@ -43,6 +41,10 @@ import LiveOperations from './components/restaurantDashboard/modules/operations/
 import KitchenDisplay from './components/restaurantDashboard/modules/kitchen/KitchenDisplay';
 import RiderLayout from './components/riderDashboard/RiderLayout';
 import RiderHome from './components/riderDashboard/modules/RiderHome';
+import AvailableOrders from './components/riderDashboard/modules/AvailableOrders';
+import CurrentDelivery from './components/riderDashboard/modules/CurrentDelivery';
+import RiderSettings from './components/riderDashboard/modules/RiderSettings';
+import EarningsManager from './components/riderDashboard/modules/earnings/EarningsManager';
 import { AIAssistant } from './components/ui/ai/AIAssistant';
 import EmptyState from './components/ui/EmptyState';
 import { Construction } from 'lucide-react';
@@ -121,10 +123,10 @@ const AppLayout = () => {
         <Route path='/rider-dashboard' element={<RiderLayout />}>
           <Route index element={<RiderHome />} />
           <Route path='home' element={<RiderHome />} />
-          <Route path='available' element={<PlaceholderModule title="Available Orders" />} />
-          <Route path='current' element={<PlaceholderModule title="Current Delivery" />} />
+          <Route path='available' element={<AvailableOrders />} />
+          <Route path='current' element={<CurrentDelivery />} />
           <Route path='history' element={<PlaceholderModule title="Delivery History" />} />
-          <Route path='earnings' element={<PlaceholderModule title="Earnings" />} />
+          <Route path='earnings' element={<EarningsManager />} />
           <Route path='performance' element={<PlaceholderModule title="Performance metrics" />} />
           <Route path='messages' element={<PlaceholderModule title="Messages" />} />
           <Route path='notifications' element={<PlaceholderModule title="Notifications" />} />
@@ -132,15 +134,27 @@ const AppLayout = () => {
           <Route path='vehicle' element={<PlaceholderModule title="Vehicle details" />} />
           <Route path='profile' element={<PlaceholderModule title="Rider Profile" />} />
           <Route path='support' element={<PlaceholderModule title="Support" />} />
-          <Route path='settings' element={<PlaceholderModule title="Settings" />} />
+          <Route path='settings' element={<RiderSettings />} />
         </Route>
 
-        <Route path='/admin-dashboard' element={<AdminDashboardPage />}>
-          <Route index element={<Navigate to="overview" replace />} />
-          <Route path='overview' element={<AdminOverView />} />
-          <Route path='order' element={<AdminOrder />} />
-          <Route path='wishlist' element={<AdminWishlist />} />
-          <Route path='setting' element={<AdminSetting />} />
+        {/* Super Admin Dashboard Routes */}
+        <Route path='/admin-dashboard' element={<AdminLayout />}>
+          <Route index element={<AdminHome />} />
+          <Route path='home' element={<AdminHome />} />
+          <Route path='orders' element={<OrderManager />} />
+          <Route path='restaurants' element={<PlaceholderModule title="Restaurants Directory" />} />
+          <Route path='riders' element={<PlaceholderModule title="Riders Directory" />} />
+          <Route path='customers' element={<PlaceholderModule title="Customers Directory" />} />
+          <Route path='finance' element={<PlaceholderModule title="Financial Control" />} />
+          <Route path='marketing' element={<PlaceholderModule title="Marketing Center" />} />
+          <Route path='support' element={<PlaceholderModule title="Support Tickets" />} />
+          <Route path='content' element={<PlaceholderModule title="Content Management" />} />
+          <Route path='reports' element={<PlaceholderModule title="System Reports" />} />
+          <Route path='analytics' element={<PlaceholderModule title="Deep Analytics" />} />
+          <Route path='system' element={<PlaceholderModule title="System Monitoring" />} />
+          <Route path='roles' element={<PlaceholderModule title="Roles & Permissions" />} />
+          <Route path='settings' element={<PlaceholderModule title="Global Settings" />} />
+          <Route path='audit' element={<PlaceholderModule title="Audit Logs" />} />
         </Route>
 
       </Routes>
