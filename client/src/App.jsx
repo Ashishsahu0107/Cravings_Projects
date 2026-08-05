@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Home from './pages/Hero/Home'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -25,7 +25,6 @@ import UserSetting from './components/userDashboard/UserSetting'
 import UserAddress from './components/userDashboard/UserAddress'
 import RestaurantDashboardPage from './pages/dashboard/RestaurantDashboard'
 import RestaurantOverView from './components/restaurantDashboard/RestaurantOverView'
-import RestaurantOrder from './components/restaurantDashboard/RestaurantOrder'
 import RestaurantWishlist from './components/restaurantDashboard/RestaurantWishlist'
 import RestaurantSetting from './components/restaurantDashboard/RestaurantSetting'
 import RiderDashboardPage from './pages/dashboard/RiderDashboard'
@@ -39,13 +38,33 @@ import AdminOrder from './components/adminDashboard/AdminOrder'
 import AdminWishlist from './components/adminDashboard/AdminWishlist'
 import AdminSetting from './components/adminDashboard/AdminSetting'
 
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './config/queryClient';
+import OrdersList from './components/restaurantDashboard/modules/orders/OrdersList';
+import MenuManager from './components/restaurantDashboard/modules/menu/MenuManager';
+import WalletManager from './components/restaurantDashboard/modules/wallet/WalletManager';
+import AnalyticsManager from './components/restaurantDashboard/modules/analytics/AnalyticsManager';
+import EmptyState from './components/ui/EmptyState';
+import { Construction } from 'lucide-react';
 
+const PlaceholderModule = ({ title }) => (
+  <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-2xl shadow-sm h-[50vh]">
+    <EmptyState 
+      title={`${title} Module`} 
+      description="This enterprise module is currently under construction and will be deployed in the next phase." 
+      icon={Construction} 
+    />
+  </div>
+);
 
-const App = () => {
+const AppLayout = () => {
+  const location = useLocation();
+  const isDashboard = location.pathname.includes('dashboard');
+
   return (
-    <BrowserRouter>
+    <>
       <Toaster />
-      <Header />
+      {!isDashboard && <Header />}
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/home' element={<Home />} />
@@ -66,7 +85,6 @@ const App = () => {
         <Route path='/terms-of-service' element={<TermsOfService />} />
         <Route path='/site-map' element={<SiteMap />} />
 
-
         {/* Dashboard routes  */}
         <Route path='/user/dashboard' element={<UserDashboard />}>
           <Route index element={<Navigate to="overview" replace />} />
@@ -80,21 +98,21 @@ const App = () => {
         <Route path='/restaurant-dashboard' element={<RestaurantDashboardPage />}>
           <Route index element={<Navigate to="overview" replace />} />
           <Route path='overview' element={<RestaurantOverView />} />
-          <Route path='order' element={<RestaurantOrder />} />
+          <Route path='order' element={<OrdersList />} />
+          <Route path='menu' element={<MenuManager />} />
           <Route path='wishlist' element={<RestaurantWishlist />} />
           <Route path='setting' element={<RestaurantSetting />} />
           
           {/* New Sidebar Placeholder Routes */}
-          <Route path='menu' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Menu Management Coming Soon</div>} />
-          <Route path='categories' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Categories Coming Soon</div>} />
-          <Route path='inventory' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Inventory Coming Soon</div>} />
-          <Route path='customers' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Customers Coming Soon</div>} />
-          <Route path='reviews' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Reviews Coming Soon</div>} />
-          <Route path='promotions' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Promotions Coming Soon</div>} />
-          <Route path='analytics' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Analytics Coming Soon</div>} />
-          <Route path='wallet' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Wallet Coming Soon</div>} />
-          <Route path='reports' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Reports Coming Soon</div>} />
-          <Route path='help' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Help Center Coming Soon</div>} />
+          <Route path='categories' element={<PlaceholderModule title="Categories Management" />} />
+          <Route path='inventory' element={<PlaceholderModule title="Inventory Management" />} />
+          <Route path='customers' element={<PlaceholderModule title="Customer Insights" />} />
+          <Route path='reviews' element={<PlaceholderModule title="Review Management" />} />
+          <Route path='promotions' element={<PlaceholderModule title="Promotions & Campaigns" />} />
+          <Route path='analytics' element={<AnalyticsManager />} />
+          <Route path='wallet' element={<WalletManager />} />
+          <Route path='reports' element={<PlaceholderModule title="Data Reports & Exports" />} />
+          <Route path='help' element={<PlaceholderModule title="Help Center" />} />
         </Route>
 
         <Route path='/rider-dashboard' element={<RiderDashboardPage />}>
@@ -114,8 +132,18 @@ const App = () => {
         </Route>
 
       </Routes>
-      <Footer />
-    </BrowserRouter>
+      {!isDashboard && <Footer />}
+    </>
+  );
+};
+
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AppLayout />
+      </BrowserRouter>
+    </QueryClientProvider>
   )
 }
 
