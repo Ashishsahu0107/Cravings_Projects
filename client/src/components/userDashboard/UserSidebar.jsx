@@ -1,12 +1,14 @@
 import React from 'react'
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FaBorderAll } from "react-icons/fa6";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { MdOutlineDashboard, MdOutlineFavorite, MdSettingsSuggest } from "react-icons/md";
 
 const MenuItems = [
     { name: "Overview", path: "overview", icon: <MdOutlineDashboard /> },
     { name: "Order", path: "order", icon: <FaBorderAll /> },
     { name: "Wishlist", path: "wishlist", icon: <MdOutlineFavorite /> },
+    { name: "Addresses", path: "address", icon: <FaMapMarkerAlt /> },
     { name: "Setting", path: "setting", icon: <MdSettingsSuggest /> },
 ]
 

@@ -5,8 +5,8 @@ import { MdOutlineDashboard, MdOutlineFavorite, MdSettingsSuggest } from "react-
 
 const MenuItems = [
     { name: "Overview", path: "overview", icon: <MdOutlineDashboard /> },
-    { name: "Order", path: "order", icon: <FaBorderAll /> },
-    { name: "Wishlist", path: "wishlist", icon: <MdOutlineFavorite /> },
+    { name: "Active Job", path: "order", icon: <FaBorderAll /> },
+    { name: "Available Jobs", path: "wishlist", icon: <MdOutlineFavorite /> },
     { name: "Setting", path: "setting", icon: <MdSettingsSuggest /> },
 ]
 

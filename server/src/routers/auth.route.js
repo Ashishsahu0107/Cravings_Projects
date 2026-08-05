@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { LoginUser, RegisterUser, LogoutUser, ForgotPassword, ResetPassword } from '../controllers/auth.controller.js';
+import { LoginUser, RegisterUser, LogoutUser, ForgotPassword, ResetPassword, RefreshToken, GetMe } from '../controllers/auth.controller.js';
 import { UpdateUserProfile, ChangePassword } from '../controllers/user.controller.js';
 import { AuthProtect } from '../middleware/auth.middleware.js';
 
@@ -14,8 +14,11 @@ router.post("/register", RegisterUser);
 router.post("/login", LoginUser);
 router.post("/forgot-password", ForgotPassword);
 router.post("/reset-password", ResetPassword);
+router.post("/refresh-token", RefreshToken);
 router.get("/logout", LogoutUser);
+router.get("/me", AuthProtect, GetMe);
 router.put("/profile", AuthProtect, upload.single('photo'), UpdateUserProfile);
 router.patch("/change-password", AuthProtect, ChangePassword);
 
 export default router;
+

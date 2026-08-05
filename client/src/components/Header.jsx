@@ -5,6 +5,7 @@ import LogoHeader from "../assets/headerLogo.png";
 import { useAuth } from "../context/AuthContext.jsx";
 import { LogOut } from "lucide-react";
 import Logo from "../assets/logo.jpeg";
+import api from "../config/api.config.js";
 
 const themeOptions = [
   { value: "light", label: "Light" },
@@ -29,7 +30,11 @@ const Header = () => {
   });
 
   const handleLogout = async () => {
-    await fetch('/api/logout', { method: 'POST' });
+    try {
+      await api.get('/auth/logout');
+    } catch (e) {
+      console.error("Logout failed on server", e);
+    }
     setIsLogin(false);
     sessionStorage.removeItem("UserData");
     setUser(null);
@@ -41,6 +46,15 @@ const Header = () => {
     localStorage.setItem("cravings-theme", theme);
   }, [theme]);
 
+  const dashboardRoute = user
+    ? {
+        customer: "/user/dashboard",
+        restaurant: "/restaurant-dashboard",
+        rider: "/rider-dashboard",
+        admin: "/admin-dashboard",
+      }[user.userType] || "/user/dashboard"
+    : "/user/dashboard";
+
   return (
     <>
       <nav className="flex sticky top-0 z-99 justify-between px-6 md:px-12 h-16 items-center bg-primary gap-4">
@@ -48,33 +62,14 @@ const Header = () => {
           <img src={LogoHeader} alt="header-images" className="h-14 " />
         </Link>
         <div className="flex items-center gap-3">
-          <label className="flex items-center gap-2 rounded-md border border-white/20 bg-base-100/10 px-3 py-1 text-sm text-white">
-            <FaPalette className="shrink-0" />
-            <span className="hidden sm:inline">Theme</span>
-            <select
-              value={theme}
-              onChange={(event) => setTheme(event.target.value)}
-              className="bg-transparent outline-none "
-              aria-label="Theme selection"
-            >
-              {themeOptions.map((option) => (
-                <option
-                  key={option.value}
-                  value={option.value}
-                  className="text-primary"
-                >
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </label>
+          
 
           {isLogin ? (
             <>
               <div className="flex items-center gap-4 ">
                 <span className=" text-white">{user.fullName}</span>
                 <Link
-                  to="/user/dashboard"
+                  to={dashboardRoute}
                   className="p-2 bg-base-100 rounded-md text-primary text-decoration-none flex items-center hover:outline "
                 >
                   Dashboard

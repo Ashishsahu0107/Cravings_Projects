@@ -1,109 +1,117 @@
 import { useEffect, useState } from "react";
-import { Users, Store, ShoppingBag, IndianRupee, UserCog, UtensilsCrossed, Star, Ban } from "lucide-react";
-import { toast } from "react-hot-toast";
-import api from "../../config/api.config";
+import api from "../../config/api.config.js";
+import toast from "react-hot-toast";
+import { FaUsers, FaStore, FaMotorcycle, FaRupeeSign, FaShoppingCart, FaUtensils } from "react-icons/fa";
 
-const AdminOverview = () => {
-  const [overview, setOverview] = useState(null);
+const AdminOverView = () => {
+  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchOverview = async () => {
+  const fetchStats = async () => {
     try {
-      const res = await api.get("/dashboard/overview");
-      setOverview(res.data.data);
+      const res = await api.get("/admin/overview");
+      if (res.data?.success) {
+        setStats(res.data.data);
+      }
     } catch (error) {
-      toast.error("Failed to load dashboard.");
+      toast.error("Failed to load admin overview statistics.");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchOverview();
+    fetchStats();
   }, []);
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center text-lg">
-        Loading Dashboard...
+      <div className="flex h-[80vh] items-center justify-center bg-base-100">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
       </div>
     );
   }
 
-  const cards = [
-    {
-      title: "Total Users",
-      value: overview.totalUsers,
-      icon: Users,
-    },
-    {
-      title: "Restaurants",
-      value: overview.totalRestaurants,
-      icon: Store,
-    },
-    {
-      title: "Managers",
-      value: overview.totalManagers,
-      icon: UserCog,
-    },
-    {
-      title: "Orders",
-      value: overview.totalOrders,
-      icon: ShoppingBag,
-    },
-    {
-      title: "Revenue",
-      value: `₹${overview.totalRevenue}`,
-      icon: IndianRupee,
-    },
-    {
-      title: "Menu Items",
-      value: overview.totalMenuItems,
-      icon: UtensilsCrossed,
-    },
-    {
-      title: "Reviews",
-      value: overview.totalReviews,
-      icon: Star,
-    },
-    {
-      title: "Blocked Restaurants",
-      value: overview.blockedRestaurants,
-      icon: Ban,
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="mb-8 text-3xl font-bold">
-        Admin Dashboard
-      </h1>
+    <div className="min-h-screen bg-base-100 p-6 space-y-8">
+      <div>
+        <h1 className="text-3xl font-extrabold text-base-content tracking-tight">System Overview</h1>
+        <p className="text-sm text-secondary">Real-time network operational metrics and performance audit logs.</p>
+      </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {cards.map((card) => (
-          <div
-            key={card.title}
-            className="rounded-xl bg-white p-6 shadow"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-500">{card.title}</p>
-
-                <h2 className="mt-2 text-3xl font-bold">
-                  {card.value}
-                </h2>
-              </div>
-
-              <card.icon
-                size={38}
-                className="text-orange-500"
-              />
-            </div>
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Cumulative Revenue */}
+        <div className="card border border-base-200 bg-base-100 p-5 rounded-2xl flex flex-row items-center justify-between shadow-xs hover-lift">
+          <div>
+            <span className="text-xs font-bold text-secondary uppercase tracking-wider">Network Revenue Audits</span>
+            <h2 className="text-2xl font-bold text-base-content mt-1 flex items-center">
+              <FaRupeeSign size={18} /> {stats?.totalRevenue || 0}
+            </h2>
           </div>
-        ))}
+          <div className="p-3 rounded-xl bg-success/15 text-success">
+            <FaRupeeSign size={20} />
+          </div>
+        </div>
+
+        {/* Total Users */}
+        <div className="card border border-base-200 bg-base-100 p-5 rounded-2xl flex flex-row items-center justify-between shadow-xs hover-lift">
+          <div>
+            <span className="text-xs font-bold text-secondary uppercase tracking-wider">Registered Accounts</span>
+            <h2 className="text-2xl font-bold text-base-content mt-1">{stats?.totalUsers || 0}</h2>
+          </div>
+          <div className="p-3 rounded-xl bg-primary/15 text-primary">
+            <FaUsers size={20} />
+          </div>
+        </div>
+
+        {/* Total Orders */}
+        <div className="card border border-base-200 bg-base-100 p-5 rounded-2xl flex flex-row items-center justify-between shadow-xs hover-lift">
+          <div>
+            <span className="text-xs font-bold text-secondary uppercase tracking-wider">Network Orders</span>
+            <h2 className="text-2xl font-bold text-base-content mt-1">{stats?.totalOrders || 0}</h2>
+          </div>
+          <div className="p-3 rounded-xl bg-info/15 text-info">
+            <FaShoppingCart size={20} />
+          </div>
+        </div>
+
+        {/* Restaurants Count */}
+        <div className="card border border-base-200 bg-base-100 p-5 rounded-2xl flex flex-row items-center justify-between shadow-xs hover-lift">
+          <div>
+            <span className="text-xs font-bold text-secondary uppercase tracking-wider">Partner Outlets</span>
+            <h2 className="text-2xl font-bold text-base-content mt-1">
+              {stats?.totalRestaurants || 0} <span className="text-xs text-success font-medium">({stats?.activeRestaurants || 0} Active)</span>
+            </h2>
+          </div>
+          <div className="p-3 rounded-xl bg-amber-500/15 text-amber-500">
+            <FaStore size={20} />
+          </div>
+        </div>
+
+        {/* Riders Count */}
+        <div className="card border border-base-200 bg-base-100 p-5 rounded-2xl flex flex-row items-center justify-between shadow-xs hover-lift">
+          <div>
+            <span className="text-xs font-bold text-secondary uppercase tracking-wider">Delivery Fleet</span>
+            <h2 className="text-2xl font-bold text-base-content mt-1">{stats?.totalRiders || 0}</h2>
+          </div>
+          <div className="p-3 rounded-xl bg-success/15 text-success">
+            <FaMotorcycle size={20} />
+          </div>
+        </div>
+
+        {/* Menu Items Count */}
+        <div className="card border border-base-200 bg-base-100 p-5 rounded-2xl flex flex-row items-center justify-between shadow-xs hover-lift">
+          <div>
+            <span className="text-xs font-bold text-secondary uppercase tracking-wider">Global Dishes Listings</span>
+            <h2 className="text-2xl font-bold text-base-content mt-1">{stats?.totalMenuItems || 0}</h2>
+          </div>
+          <div className="p-3 rounded-xl bg-secondary/15 text-secondary">
+            <FaUtensils size={20} />
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default AdminOverview;
+export default AdminOverView;

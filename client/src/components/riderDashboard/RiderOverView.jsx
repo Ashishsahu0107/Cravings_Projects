@@ -1,103 +1,130 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext.jsx'
-import { FiClock, FiHeart, FiShoppingCart, FiUser, FiArrowRight, FiMapPin, FiStar } from 'react-icons/fi'
-import { restaurants } from '../../data/siteData.js'
-
-const stats = [
-  { label: 'Orders', value: '24', icon: <FiShoppingCart size={18} />, color: 'bg-orange-50 text-orange-600' },
-  { label: 'Favorites', value: '08', icon: <FiHeart size={18} />, color: 'bg-rose-50 text-rose-600' },
-  { label: 'Pending', value: '03', icon: <FiClock size={18} />, color: 'bg-amber-50 text-amber-600' },
-  { label: 'Profile', value: '82%', icon: <FiUser size={18} />, color: 'bg-emerald-50 text-emerald-600' },
-]
+import { useEffect, useState } from "react";
+import api from "../../config/api.config.js";
+import toast from "react-hot-toast";
+import { FaMotorcycle, FaRupeeSign, FaStar, FaToggleOn, FaToggleOff } from "react-icons/fa";
 
 const RiderOverView = () => {
-  const { user } = useAuth()
+  const [dashboard, setDashboard] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [toggling, setToggling] = useState(false);
+
+  const fetchRiderData = async () => {
+    try {
+      const res = await api.get("/rider/dashboard");
+      if (res.data?.success) {
+        setDashboard(res.data.data);
+      }
+    } catch (error) {
+      toast.error("Failed to load rider dashboard.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRiderData();
+  }, []);
+
+  const handleToggleOnline = async () => {
+    setToggling(true);
+    try {
+      const res = await api.patch("/rider/toggle-availability");
+      if (res.data?.success) {
+        toast.success(res.data.message);
+        setDashboard((prev) => ({ ...prev, isAvailable: res.data.isAvailable }));
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to change status.");
+    } finally {
+      setToggling(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex h-[80vh] items-center justify-center bg-base-100">
+        <span className="loading loading-spinner loading-lg text-primary"></span>
+      </div>
+    );
+  }
 
   return (
-    <div className='h-full overflow-auto bg-base-100 p-4 sm:p-6 lg:p-8'>
-      <div className='rounded-sm bg-gradient-to-r from-primary to-warning p-6 text-primary-content shadow-lg'>
-        <div className='flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between'>
+    <div className="min-h-screen bg-base-100 p-6 space-y-6">
+      
+      {/* Top Header */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-4">
+        <div>
+          <h1 className="text-3xl font-extrabold text-base-content tracking-tight">Rider Dashboard</h1>
+          <p className="text-sm text-secondary">Monitor your earnings, ratings, and toggle shift status.</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleToggleOnline}
+            disabled={toggling || dashboard?.status !== "active"}
+            className={`btn btn-sm text-xs font-bold rounded-xl text-white flex items-center gap-2 ${
+              dashboard?.isAvailable ? "btn-success" : "btn-error"
+            }`}
+          >
+            {dashboard?.isAvailable ? <FaToggleOn size={16} /> : <FaToggleOff size={16} />}
+            {toggling ? "Saving..." : dashboard?.isAvailable ? "Duty: ONLINE" : "Duty: OFFLINE"}
+          </button>
+          {dashboard?.status !== "active" && (
+            <span className="badge badge-warning text-[10px] uppercase font-bold py-2">Verification Pending</span>
+          )}
+        </div>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid gap-6 sm:grid-cols-3">
+        
+        {/* Earnings */}
+        <div className="card border border-base-200 bg-base-100 p-5 rounded-2xl flex flex-row items-center justify-between shadow-xs hover-lift">
           <div>
-            <p className='text-sm uppercase tracking-[0.3em] opacity-80'>Cravings dashboard</p>
-            <h2 className='mt-2 text-2xl font-bold sm:text-3xl'>Welcome back, {user?.fullName || 'Foodie'}!</h2>
-            <p className='mt-2 max-w-2xl text-sm sm:text-base opacity-90'>Track your orders, save your favorite restaurants, and discover fresh meals that match your cravings.</p>
+            <span className="text-xs font-bold text-secondary uppercase tracking-wider">Total Earnings</span>
+            <h2 className="text-2xl font-bold text-base-content mt-1 flex items-center">
+              <FaRupeeSign size={18} /> {dashboard?.earnings || 0}
+            </h2>
           </div>
-          <Link to='/order-now' className='inline-flex items-center justify-center gap-2 rounded-sm bg-base-100 px-4 py-2 text-sm font-semibold text-primary transition hover:opacity-90'>
-            Order Again <FiArrowRight />
-          </Link>
-        </div>
-      </div>
-
-      <div className='mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4'>
-        {stats.map((item, index) => (
-          <div key={index} className='rounded-sm border border-base-200 bg-base-100 p-4 shadow-sm flex justify-between'>
-            
-            <div>
-              <p className='text-sm text-secondary'>{item.label}</p>
-            <p className='text-2xl font-bold text-base-content'>{item.value}</p>
-            </div>
-            <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-sm ${item.color}`}>
-              {item.icon}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className='mt-6 grid gap-6 lg:grid-cols-[1.3fr_0.7fr]'>
-        <div className='rounded-sm border border-base-200 bg-base-100 p-6 shadow-sm'>
-          <div className='flex items-center justify-between'>
-            <div>
-              <h3 className='text-xl font-semibold text-base-content'>Recommended for you</h3>
-              <p className='text-sm text-secondary'>Popular spots picked for your taste.</p>
-            </div>
-            <Link to='/order-now' className='text-sm font-semibold text-primary'>Explore all</Link>
-          </div>
-
-          <div className='mt-4 space-y-3'>
-            {restaurants.slice(0, 3).map((restaurant) => (
-              <div key={restaurant.id} className='flex items-center justify-between rounded-sm border border-base-200 bg-base-100 p-4'>
-                <div>
-                  <h4 className='font-semibold text-base-content'>{restaurant.name}</h4>
-                  <div className='mt-1 flex flex-wrap items-center gap-2 text-sm text-secondary'>
-                    <span className='inline-flex items-center gap-1'><FiStar className='text-amber-500' /> {restaurant.rating}</span>
-                    <span className='inline-flex items-center gap-1'><FiMapPin /> {restaurant.city}</span>
-                  </div>
-                </div>
-                <Link to='/order-now' className='rounded-sm bg-primary px-3 py-2 text-sm font-semibold text-primary-content'>View menu</Link>
-              </div>
-            ))}
+          <div className="p-3 rounded-xl bg-success/15 text-success">
+            <FaRupeeSign size={20} />
           </div>
         </div>
 
-        <div className='space-y-6'>
-          <div className='rounded-sm border border-base-200 bg-base-100 p-6 shadow-sm'>
-            <h3 className='text-lg font-semibold text-base-content'>Today’s activity</h3>
-            <ul className='mt-4 space-y-3 text-sm text-secondary'>
-              <li className='rounded-sm bg-base-100 p-3'>Your last order from <span className='font-semibold text-base-content'>Under The Mango Tree</span> was delivered 20 mins ago.</li>
-              <li className='rounded-sm bg-base-100 p-3'>You saved <span className='font-semibold text-base-content'>3 restaurants</span> to your wishlist this week.</li>
-              <li className='rounded-sm bg-base-100 p-3'>New offer available for <span className='font-semibold text-base-content'>free delivery</span> on your next order.</li>
-            </ul>
+        {/* Deliveries Count */}
+        <div className="card border border-base-200 bg-base-100 p-5 rounded-2xl flex flex-row items-center justify-between shadow-xs hover-lift">
+          <div>
+            <span className="text-xs font-bold text-secondary uppercase tracking-wider">Completed Deliveries</span>
+            <h2 className="text-2xl font-bold text-base-content mt-1">{dashboard?.jobCounts || 0}</h2>
           </div>
-
-          <div className='rounded-sm border border-base-200 bg-primary p-6 text-primary-content shadow-sm'>
-            <h3 className='text-lg font-semibold'>Quick shortcuts</h3>
-            <div className='mt-4 space-y-3'>
-              <Link to='/order-now' className='flex items-center justify-between rounded-sm bg-base-100/15 px-4 py-3'>
-                <span>Order food</span><FiArrowRight />
-              </Link>
-              <Link to='/user/dashboard/wishlist' className='flex items-center justify-between rounded-sm bg-base-100/15 px-4 py-3'>
-                <span>View wishlist</span><FiHeart />
-              </Link>
-              <Link to='/user/dashboard/setting' className='flex items-center justify-between rounded-sm bg-base-100/15 px-4 py-3'>
-                <span>Update profile</span><FiUser />
-              </Link>
-            </div>
+          <div className="p-3 rounded-xl bg-primary/15 text-primary">
+            <FaMotorcycle size={20} />
           </div>
         </div>
+
+        {/* Rating */}
+        <div className="card border border-base-200 bg-base-100 p-5 rounded-2xl flex flex-row items-center justify-between shadow-xs hover-lift">
+          <div>
+            <span className="text-xs font-bold text-secondary uppercase tracking-wider">Average Rating</span>
+            <h2 className="text-2xl font-bold text-base-content mt-1 flex items-center gap-1">
+              <FaStar size={18} className="text-amber-500" /> {dashboard?.rating || "5.0"}
+            </h2>
+          </div>
+          <div className="p-3 rounded-xl bg-amber-500/15 text-amber-500">
+            <FaStar size={20} />
+          </div>
+        </div>
+
       </div>
+
+      <div className="rounded-2xl border bg-base-50 p-6 max-w-xl text-xs text-secondary space-y-2">
+        <h3 className="font-bold text-base-content text-sm mb-2">Delivery Shift Info</h3>
+        <p>• Make sure to turn on your <strong className="text-success">Duty switch</strong> to accept ready orders from the "Available Jobs" list.</p>
+        <p>• Earn ₹40 for every successfully completed job run.</p>
+        <p>• You can inspect your active job, update delivery status, and simulate GPS telemetry movements in the "Active Job" tab.</p>
+      </div>
+
     </div>
-  )
-}
+  );
+};
 
-export default RiderOverView
+export default RiderOverView;

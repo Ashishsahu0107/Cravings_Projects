@@ -4,10 +4,10 @@ import { FaBorderAll } from "react-icons/fa6";
 import { MdOutlineDashboard, MdOutlineFavorite, MdSettingsSuggest } from "react-icons/md";
 
 const MenuItems = [
-    { name: "Dashboard", path: "overview", icon: <MdOutlineDashboard /> },
-    { name: "Order", path: "order", icon: <FaBorderAll /> },
-    { name: "Wishlist", path: "wishlist", icon: <MdOutlineFavorite /> },
-    { name: "Setting", path: "setting", icon: <MdSettingsSuggest /> },
+    { name: "Overview", path: "overview", icon: <MdOutlineDashboard /> },
+    { name: "Orders & Users", path: "order", icon: <FaBorderAll /> },
+    { name: "Vetting Portal", path: "wishlist", icon: <MdOutlineFavorite /> },
+    { name: "Feedback & Config", path: "setting", icon: <MdSettingsSuggest /> },
 ]
 
 const AdminSidebar = () => {

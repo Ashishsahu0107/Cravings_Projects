@@ -43,6 +43,14 @@ const OrderSchema = new mongoose.Schema(
             type: String,
             default: "Home address",
         },
+        riderId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+        review: {
+            rating: { type: Number },
+            comment: { type: String },
+        },
     },
     {
         timestamps: true,
@@ -51,3 +59,4 @@ const OrderSchema = new mongoose.Schema(
 
 const Order = mongoose.model("Order", OrderSchema);
 export default Order;
+

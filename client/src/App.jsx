@@ -22,6 +22,7 @@ import UserOverView from './components/userDashboard/UserOverView'
 import UserOrder from './components/userDashboard/UserOrder'
 import UserWishlist from './components/userDashboard/UserWishlist'
 import UserSetting from './components/userDashboard/UserSetting'
+import UserAddress from './components/userDashboard/UserAddress'
 import RestaurantDashboardPage from './pages/dashboard/RestaurantDashboard'
 import RestaurantOverView from './components/restaurantDashboard/RestaurantOverView'
 import RestaurantOrder from './components/restaurantDashboard/RestaurantOrder'
@@ -72,6 +73,7 @@ const App = () => {
           <Route path='overview' element={<UserOverView />} />
           <Route path='order' element={<UserOrder />} />
           <Route path='wishlist' element={<UserWishlist />} />
+          <Route path='address' element={<UserAddress />} />
           <Route path='setting' element={<UserSetting />} />
         </Route>
 

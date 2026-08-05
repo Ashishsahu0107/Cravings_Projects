@@ -3,7 +3,7 @@ import User from '../models/user.model.js';
 
 export const AuthProtect = async (req, res, next) => {
     try {
-        const token = req.cookies?.CravingToken || req.headers.authorization?.split(" ")[1];
+        const token = req.cookies?.Oreo || req.headers.authorization?.split(" ")[1];
 
         if (!token) {
             const error = new Error("Authentication token missing");
@@ -35,7 +35,7 @@ export const verifyToken = async (req, res, next) => {
     let token = req.headers.authorization;
 
     if (!token) {
-      token = req.cookies?.CravingToken;
+      token = req.cookies?.Oreo;
     }
 
     if (!token) {

@@ -35,13 +35,17 @@ const UserSchema = mongoose.Schema(
             required: true,
             default:"customer",
         },
-        password: {
+                password: {
             type: String,
             required: true,
         },
         dob: {
             type: String,
             required: true,
+        },
+        isBlocked: {
+            type: Boolean,
+            default: false,
         },
     },
     {

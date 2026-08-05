@@ -4,7 +4,7 @@ const CustomerSchema = mongoose.Schema(
   {
     customerId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      ref: "User",
       required: true,
     },
     addressBook: {
@@ -35,10 +35,29 @@ const CustomerSchema = mongoose.Schema(
         },
       ],
     },
+    cart: {
+      restaurantId: { type: String, default: "" },
+      restaurantName: { type: String, default: "" },
+      items: [
+        {
+          itemId: { type: String },
+          name: { type: String, required: true },
+          price: { type: Number, required: true },
+          qty: { type: Number, required: true, default: 1 },
+          image: { url: String, publicId: String }
+        }
+      ]
+    },
+    favorites: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "restaurant"
+      }
+    ]
   },
   { timestamps: true },
 );
 
 const Customer = mongoose.model("customer", CustomerSchema);
 
-export default Customer;
+export default Customer;
