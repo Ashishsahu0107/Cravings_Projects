@@ -83,6 +83,18 @@ const App = () => {
           <Route path='order' element={<RestaurantOrder />} />
           <Route path='wishlist' element={<RestaurantWishlist />} />
           <Route path='setting' element={<RestaurantSetting />} />
+          
+          {/* New Sidebar Placeholder Routes */}
+          <Route path='menu' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Menu Management Coming Soon</div>} />
+          <Route path='categories' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Categories Coming Soon</div>} />
+          <Route path='inventory' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Inventory Coming Soon</div>} />
+          <Route path='customers' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Customers Coming Soon</div>} />
+          <Route path='reviews' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Reviews Coming Soon</div>} />
+          <Route path='promotions' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Promotions Coming Soon</div>} />
+          <Route path='analytics' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Analytics Coming Soon</div>} />
+          <Route path='wallet' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Wallet Coming Soon</div>} />
+          <Route path='reports' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Reports Coming Soon</div>} />
+          <Route path='help' element={<div className="p-8 text-center text-gray-500 dark:text-gray-400">Help Center Coming Soon</div>} />
         </Route>
 
         <Route path='/rider-dashboard' element={<RiderDashboardPage />}>
