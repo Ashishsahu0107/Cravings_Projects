@@ -1,6 +1,6 @@
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
-import { ChartCard } from '../../../../ui/finance/ChartCard';
+import { ChartCard } from '../../../ui/finance/ChartCard';
 import { motion } from 'framer-motion';
 
 const revenueData = [

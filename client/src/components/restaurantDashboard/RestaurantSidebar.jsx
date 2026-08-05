@@ -3,19 +3,20 @@ import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard, ShoppingBag, UtensilsCrossed, Grid, 
   Package, Users, Star, Ticket, BarChart3, Wallet, 
-  FileText, Settings, HelpCircle, Store
+  FileText, Settings, HelpCircle, Store, ChefHat, Activity
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const MenuItems = [
-  { name: "Dashboard", path: "overview", icon: <LayoutDashboard size={20} /> },
-  { name: "Orders", path: "order", icon: <ShoppingBag size={20} /> },
+  { name: "Live Operations", path: "operations", icon: <Activity size={20} /> },
+  { name: "Kitchen Display", path: "kitchen", icon: <ChefHat size={20} /> },
+  { name: "Orders", path: "orders", icon: <ShoppingBag size={20} /> },
   { name: "Menu Management", path: "menu", icon: <UtensilsCrossed size={20} /> },
   { name: "Categories", path: "categories", icon: <Grid size={20} /> },
   { name: "Inventory", path: "inventory", icon: <Package size={20} /> },
   { name: "Customers", path: "customers", icon: <Users size={20} /> },
   { name: "Reviews", path: "reviews", icon: <Star size={20} /> },
-  { name: "Promotions", path: "promotions", icon: <Ticket size={20} /> },
+  { name: "Marketing", path: "marketing", icon: <Ticket size={20} /> },
   { name: "Analytics", path: "analytics", icon: <BarChart3 size={20} /> },
   { name: "Wallet", path: "wallet", icon: <Wallet size={20} /> },
   { name: "Reports", path: "reports", icon: <FileText size={20} /> },

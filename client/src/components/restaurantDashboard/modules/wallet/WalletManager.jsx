@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Wallet, DollarSign, ArrowDownRight, ArrowUpRight, CheckCircle2, AlertCircle, FileText, Download } from 'lucide-react';
-import { StatCard } from '../../../../ui/finance/StatCard';
-import DataTable from '../../../../ui/DataTable';
-import StatusBadge from '../../../../ui/StatusBadge';
+import { StatCard } from '../../../ui/finance/StatCard';
+import DataTable from '../../../ui/DataTable';
+import StatusBadge from '../../../ui/StatusBadge';
 import { motion } from 'framer-motion';
 
 const fetchTransactions = async () => {

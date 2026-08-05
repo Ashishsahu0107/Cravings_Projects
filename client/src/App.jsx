@@ -27,11 +27,6 @@ import RestaurantDashboardPage from './pages/dashboard/RestaurantDashboard'
 import RestaurantOverView from './components/restaurantDashboard/RestaurantOverView'
 import RestaurantWishlist from './components/restaurantDashboard/RestaurantWishlist'
 import RestaurantSetting from './components/restaurantDashboard/RestaurantSetting'
-import RiderDashboardPage from './pages/dashboard/RiderDashboard'
-import RiderOverView from './components/riderDashboard/RiderOverView'
-import RiderOrder from './components/riderDashboard/RiderOrder'
-import RiderWishlist from './components/riderDashboard/RiderWishlist'
-import RiderSetting from './components/riderDashboard/RiderSetting'
 import AdminDashboardPage from './pages/dashboard/AdminDashboard'
 import AdminOverView from './components/adminDashboard/AdminOverView'
 import AdminOrder from './components/adminDashboard/AdminOrder'
@@ -44,6 +39,11 @@ import OrdersList from './components/restaurantDashboard/modules/orders/OrdersLi
 import MenuManager from './components/restaurantDashboard/modules/menu/MenuManager';
 import WalletManager from './components/restaurantDashboard/modules/wallet/WalletManager';
 import AnalyticsManager from './components/restaurantDashboard/modules/analytics/AnalyticsManager';
+import LiveOperations from './components/restaurantDashboard/modules/operations/LiveOperations';
+import KitchenDisplay from './components/restaurantDashboard/modules/kitchen/KitchenDisplay';
+import RiderLayout from './components/riderDashboard/RiderLayout';
+import RiderHome from './components/riderDashboard/modules/RiderHome';
+import { AIAssistant } from './components/ui/ai/AIAssistant';
 import EmptyState from './components/ui/EmptyState';
 import { Construction } from 'lucide-react';
 
@@ -65,6 +65,7 @@ const AppLayout = () => {
     <>
       <Toaster />
       {!isDashboard && <Header />}
+      {isDashboard && <AIAssistant />}
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/home' element={<Home />} />
@@ -96,9 +97,10 @@ const AppLayout = () => {
         </Route>
 
         <Route path='/restaurant-dashboard' element={<RestaurantDashboardPage />}>
-          <Route index element={<Navigate to="overview" replace />} />
-          <Route path='overview' element={<RestaurantOverView />} />
-          <Route path='order' element={<OrdersList />} />
+          <Route index element={<LiveOperations />} />
+          <Route path='operations' element={<LiveOperations />} />
+          <Route path='kitchen' element={<KitchenDisplay />} />
+          <Route path='orders' element={<OrdersList />} />
           <Route path='menu' element={<MenuManager />} />
           <Route path='wishlist' element={<RestaurantWishlist />} />
           <Route path='setting' element={<RestaurantSetting />} />
@@ -108,19 +110,29 @@ const AppLayout = () => {
           <Route path='inventory' element={<PlaceholderModule title="Inventory Management" />} />
           <Route path='customers' element={<PlaceholderModule title="Customer Insights" />} />
           <Route path='reviews' element={<PlaceholderModule title="Review Management" />} />
-          <Route path='promotions' element={<PlaceholderModule title="Promotions & Campaigns" />} />
+          <Route path='marketing' element={<PlaceholderModule title="Marketing Automation" />} />
           <Route path='analytics' element={<AnalyticsManager />} />
           <Route path='wallet' element={<WalletManager />} />
           <Route path='reports' element={<PlaceholderModule title="Data Reports & Exports" />} />
           <Route path='help' element={<PlaceholderModule title="Help Center" />} />
         </Route>
 
-        <Route path='/rider-dashboard' element={<RiderDashboardPage />}>
-          <Route index element={<Navigate to="overview" replace />} />
-          <Route path='overview' element={<RiderOverView />} />
-          <Route path='order' element={<RiderOrder />} />
-          <Route path='wishlist' element={<RiderWishlist />} />
-          <Route path='setting' element={<RiderSetting />} />
+        {/* Rider Dashboard Routes */}
+        <Route path='/rider-dashboard' element={<RiderLayout />}>
+          <Route index element={<RiderHome />} />
+          <Route path='home' element={<RiderHome />} />
+          <Route path='available' element={<PlaceholderModule title="Available Orders" />} />
+          <Route path='current' element={<PlaceholderModule title="Current Delivery" />} />
+          <Route path='history' element={<PlaceholderModule title="Delivery History" />} />
+          <Route path='earnings' element={<PlaceholderModule title="Earnings" />} />
+          <Route path='performance' element={<PlaceholderModule title="Performance metrics" />} />
+          <Route path='messages' element={<PlaceholderModule title="Messages" />} />
+          <Route path='notifications' element={<PlaceholderModule title="Notifications" />} />
+          <Route path='documents' element={<PlaceholderModule title="Documents" />} />
+          <Route path='vehicle' element={<PlaceholderModule title="Vehicle details" />} />
+          <Route path='profile' element={<PlaceholderModule title="Rider Profile" />} />
+          <Route path='support' element={<PlaceholderModule title="Support" />} />
+          <Route path='settings' element={<PlaceholderModule title="Settings" />} />
         </Route>
 
         <Route path='/admin-dashboard' element={<AdminDashboardPage />}>
